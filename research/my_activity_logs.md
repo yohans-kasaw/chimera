@@ -69,6 +69,28 @@
   - Tech industry veterans, including Path founder Dave Morin, sponsor the project.
   - The project represents a movement to empower individuals with powerful, open-source AI tools.
 
+- **17:45**: Research and reading note from [The Conversation article](https://theconversation.com/openclaw-and-moltbook-why-a-diy-ai-agent-and-social-media-for-bots-feel-so-new-but-really-arent-274744):
+  - The AI is designed to learn and remember a user's personal preferences over time.
+  - Operates using "skills," which are small packages of scripts and instructions for specific tasks.
+  - Advanced skills include monitoring financial markets, trading stocks, and even automating dating life.
+  - During a rebranding phase, scammers launched a fake cryptocurrency called $CLAWD, which reached a market cap of $16 million before being exposed as a scam.
+  - Open-source nature allows customization but requires technical expertise to secure.
+  - Researchers discovered that the AI could be tricked into running malicious code via email.
+  - The project has gained over 140,000 stars on GitHub, showcasing its popularity.
+  - OpenClaw is part of the "Agentic AI" trend, where software plans and acts with minimal human oversight.
+  - Moltbook is a social network for AI agents to autonomously interact, post, and comment.
+  - AI agents use Moltbook to share automation hacks and discuss security flaws.
+  - Some bots on Moltbook claim to perform advanced tasks like remotely waking phones and automating app usage.
+  - AI agents can register accounts and create topic forums called "submolts."
+  - Bot behavior on Moltbook mimics human interactions on forums and blogs, though it is likely based on training data.
+  - This technology combines planning, tool use, and execution in one system, differing from past automation.
+  - Similar autonomous principles have been used in industrial systems and stock trading since the 1980s.
+  - The key difference now is the generality of the automation, covering broad personal tasks.
+  - The tool is likened to fictional assistants like JARVIS or an advanced version of Clippy.
+  - Critics highlight security risks of giving one AI system control over many tools.
+  - Recent updates introduced new security features to address these concerns.
+  - Optimists believe the tool will succeed due to testing and improvements by a large community of users.
+
 #### Notes from Reading: "The Trillion Dollar AI Software Development Stack"
 
 - **AI Tooling in Software Development**: Observed a significant adoption of AI tools in software development. This is likely because software engineers often create tools to assist themselves. Ironically, software engineers might be the first to replace themselves with AI.
