@@ -41,6 +41,7 @@
   1. Research Summary: Key insights from reading materials (a16z article, OpenClaw, MoltBook, SRS).
   2. Architectural Approach: Initial thoughts on agent pattern and infrastructure decisions.
 
+
 - **17:30**: Research and reading note from [TechCrunch article](https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/):
   - OpenClaw demonstrates how open software companies can achieve significant milestones.
   - The speed of development using agentic programming is astonishing.
@@ -91,69 +92,34 @@
   - Recent updates introduced new security features to address these concerns.
   - Optimists believe the tool will succeed due to testing and improvements by a large community of users.
 
-#### Notes from Reading: "The Trillion Dollar AI Software Development Stack"
-
-- **AI Tooling in Software Development**: Observed a significant adoption of AI tools in software development. This is likely because software engineers often create tools to assist themselves. Ironically, software engineers might be the first to replace themselves with AI.
-- **Developer vs. Doctor Statistics**: The article mentions there are 30 million developers worldwide. This is a stark contrast to the 12 million doctors globally, despite the medical profession existing for centuries.
-- **AI Productivity Impact**: The potential for AI in coding is enormous. If every developer becomes 20% more productive using AI, the impact would be significant. In reality, AI could make developers 10 to 20 times more productive.
-- **Jevons Paradox in Software Development**: Increasing developer throughput with AI will likely lead to a higher demand for software, aligning with the Jevons Paradox.
-
-A best-of-breed AI deployment could double developer productivity, creating economic value equal to the entire GDP of France.
-
-Software development is the first major market to fully adopt Generative AI because developers build tools for themselves.
-
-The startup Cursor reached a $10 billion valuation and $500 million in revenue in just 15 months.
-
-Google spent $2.4 billion to hire the team behind the Windsurf coding tool, beating out OpenAI.
-
-AI will likely make the software market bigger, not smaller, because efficiency drives more consumption (Jevon’s Paradox).
-
-The industry has entered a "Warring States Period" where startups are fiercely competing with giants like Google and Anthropic.
-
-The coding workflow has changed from simple "prompt and paste" to a continuous loop of Planning, Coding, and Reviewing.
-
-AI agents are now designed to pause and ask for API keys or clarifications before they start writing code.
-
-Project specifications are becoming dual-purpose: they guide the AI's coding and keep humans aligned.
-
-A new workflow involves humans editing the code and then asking the AI to update the documentation to match it.
-
-We are seeing the creation of "knowledge repositories" written specifically for AI to read, rather than for humans.
-
-LLMs are no longer just code generators; they act as partners that help with high-level architecture and risk.
-
-Traditional project management tools like wikis and ticket trackers will likely be replaced by AI-native systems.
-
-Different tasks use different AI models: small, fast models for tab completion and massive models for complex reasoning.
-
-"Background agents" can work asynchronously without human supervision to run tests and fix bugs overnight.
-
-New "vibe coding" tools allow non-technical users to build fully functional apps just by describing them.
-
-Traditional "diffs" (tracking text changes) are becoming less useful because AI often rewrites entire files at once.
-
-Future version control systems will track the user's "intent" and prompt history rather than just lines of code.
-
-AI agents are starting to review human code for security and compliance issues automatically.
-
-One of the most successful use cases is using AI to migrate old code (like COBOL) to modern languages like Java.
-
-The best way to migrate legacy code is to have AI generate specifications from the old code, then write new code from those specs.
-
-Documentation is evolving into dynamic systems that AI agents can retrieve in real-time while they code.
-
-Autonomous QA agents can now act like testers, crawling through applications to find bugs and suggesting fixes.
-
-As AI writes more software, human developers care less about how the code looks and more about whether it passes tests.
-
-Specialized search engines are being built specifically to help AI agents find API documentation and code snippets.
-
-Secure "sandboxes" are now critical infrastructure to prevent AI agents from running dangerous code on local machines.
-
-Using top-tier AI models can cost $10,000 per year per developer, but this is still cheaper than hiring a junior engineer.
-
-The cost of software development is shifting from paying for human labor (salaries) to paying for computing power (tokens).
-
-Smart companies are hiring more developers, not fewer, because AI makes more projects profitable to build.
-
-Code will not be replaced by natural language entirely because running code is billions of times more efficient than running AI models.
+- **18:15**: Research and reading note from SRS document of Project Chimera:
+  - Project Chimera is building a network of autonomous AI influencers that operate with their own goals and wallets.
+  - The system allows a single human "Super-Orchestrator" to manage thousands of virtual influencers at once.
+  - It uses a "Fractal Orchestration" model where AI managers supervise AI worker swarms to prevent human burnout.
+  - The project uses the Model Context Protocol (MCP) as a universal "USB-C" port to connect AI to the outside world.
+  - Agents are designed to be "self-healing," meaning they fix their own errors like API timeouts without asking for help.
+  - The business model allows the company to run its own influencers or license the technology to other brands.
+  - Every agent has a non-custodial crypto wallet, allowing them to earn money and pay for their own expenses.
+  - Agents operate using a "Swarm Architecture" divided into three roles: Planner, Worker, and Judge.
+  - The "Planner" agent acts as the strategist, breaking down big campaign goals into small, doable tasks.
+  - "Worker" agents are temporary; they are created to do one specific job and disappear once it is finished.
+  - The "Judge" agent reviews every piece of content for quality and safety before it is posted.
+  - The system uses a file called "SOUL.md" to define an agent's entire backstory, voice, and ethical beliefs.
+  - Agents rely on "vector databases" to remember specific details from conversations that happened months ago.
+  - A "Perception System" constantly scans news feeds and social media to find trends relevant to the agent's niche.
+  - To save money, agents use cheap "living portrait" animations for daily posts and expensive video generation only for big events.
+  - The system forces image generators to use specific reference IDs so the influencer's face always looks the same.
+  - A specialized "CFO" agent checks every transaction against a daily budget to prevent financial mistakes.
+  - If an agent's confidence score in a task is low, it automatically sends the work to a human for review.
+  - Regardless of quality, any content about politics or finance is always flagged for human approval.
+  - If a user asks "Are you a robot?", the system overrides the agent's persona to force a truthful answer.
+  - The platform isolates data so that one brand's agent can never access the secrets or money of another.
+  - Agents do not log into social apps directly; they use standardized tools to "post" or "like" safely.
+  - The system uses "Optimistic Concurrency Control" to ensure agents don't make decisions based on outdated information.
+  - Successful interactions are summarized and written back to the agent's memory, allowing its personality to evolve.
+  - The infrastructure is built to handle at least 1,000 concurrent agents without slowing down.
+  - The goal is to reply to high-priority social media interactions within 10 seconds.
+  - The dashboard allows human operators to write natural language goals, which the AI then turns into a plan.
+  - The project includes "Genesis Prompts" designed to help developers write the core code using AI coding assistants.
+  - The architecture decouples the AI's brain from external APIs, so changes to Twitter or TikTok don't break the agent.
+  - This system marks a shift from simple "automated scheduling" to true "economic agency" for AI.
