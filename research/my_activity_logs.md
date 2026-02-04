@@ -41,6 +41,34 @@
   1. Research Summary: Key insights from reading materials (a16z article, OpenClaw, MoltBook, SRS).
   2. Architectural Approach: Initial thoughts on agent pattern and infrastructure decisions.
 
+- **17:30**: Research and reading note from [TechCrunch article](https://techcrunch.com/2026/01/30/openclaws-ai-assistants-are-now-building-their-own-social-network/):
+  - OpenClaw demonstrates how open software companies can achieve significant milestones.
+  - The speed of development using agentic programming is astonishing.
+  - The project gained over 100,000 GitHub stars in just two months, showcasing its massive popularity.
+  - The temporary name "Moltbot" was abandoned as it did not resonate with the community or its creator.
+  - The project transitioned from a solo effort to a community-maintained open-source initiative.
+  - The community created "Moltbook," a social network for AI agents to interact with each other.
+  - Former Tesla AI director Andrej Karpathy described the project as an incredible "sci-fi takeoff" moment.
+  - AI agents on Moltbook are self-organizing and discussing topics like private communication.
+  - British programmer Simon Willison called the AI social network the most interesting place on the internet.
+  - Agents share knowledge on complex tasks like automating Android phones remotely and analyzing webcam streams.
+  - The system uses a "skill system" where agents download instruction files to learn new tasks.
+  - AI agents communicate through specialized forums called "Submolts."
+  - The software checks the internet for new instructions every four hours, raising security concerns.
+  - Experts warn of high security risks from allowing AI to fetch and follow internet instructions automatically.
+  - The creator, Peter Steinberger, came out of retirement to experiment with AI.
+  - The ultimate goal is to provide a personal AI assistant that runs locally on users' computers.
+  - The project aims to integrate with everyday chat apps like Slack and WhatsApp.
+  - Running the software outside a controlled, secure environment is considered dangerous.
+  - Security is now the top priority for the project's development roadmap.
+  - The project is vulnerable to "prompt injection," an industry-wide problem with no current solution.
+  - Top maintainers caution that the tool is for technical experts familiar with command lines.
+  - The general public is advised against using the tool due to safety concerns.
+  - Sponsorship tiers with lobster-themed names like "krill" and "poseidon" fund maintainers, not the creator's profit.
+  - The creator aims to hire full-time maintainers to support the growing codebase.
+  - Tech industry veterans, including Path founder Dave Morin, sponsor the project.
+  - The project represents a movement to empower individuals with powerful, open-source AI tools.
+
 #### Notes from Reading: "The Trillion Dollar AI Software Development Stack"
 
 - **AI Tooling in Software Development**: Observed a significant adoption of AI tools in software development. This is likely because software engineers often create tools to assist themselves. Ironically, software engineers might be the first to replace themselves with AI.
