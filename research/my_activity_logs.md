@@ -12,6 +12,7 @@
 7.  Outlined a 4-step roadmap: Research & Documentation, Specification Building, Testing & Containerization, and Network Integration.
 8.   Decided on Vector Databases for semantic long-term memory ("Episodic" vs "Semantic") and Optimistic Concurrency Control to handle distributed agent state.
 9.  Initial research is complete, critical architectural patterns are defined, and the development environment is being provisioned. The focus now shifts to implementing the "Planner" agent prototype.
+10. **SDD Research (Feb 5, 2026)**: Deep dive into Spec-Driven Development (SDD) principles from Martin Fowler's article. Key insights include separating Memory Banks from Specs for scalable context management, "spec-as-source" treating code as read-only artifacts, and "spec-anchored" documentation as living executable truth. SDD revitalizes Model-Driven Development using natural language instead of rigid DSLs.
 
 ## TL;DR
 
@@ -171,9 +172,25 @@
   - Agents do not log into social apps directly; they use standardized tools to "post" or "like" safely.
   - The system uses "Optimistic Concurrency Control" to ensure agents don't make decisions based on outdated information.
   - Successful interactions are summarized and written back to the agent's memory, allowing its personality to evolve.
-  - The infrastructure is built to handle at least 1,000 concurrent agents without slowing down.
-  - The goal is to reply to high-priority social media interactions within 10 seconds.
-  - The dashboard allows human operators to write natural language goals, which the AI then turns into a plan.
-  - The project includes "Genesis Prompts" designed to help developers write the core code using AI coding assistants.
-  - The architecture decouples the AI's brain from external APIs, so changes to Twitter or TikTok don't break the agent.
-  - This system marks a shift from simple "automated scheduling" to true "economic agency" for AI.
+- The infrastructure is built to handle at least 1,000 concurrent agents without slowing down.
+- The goal is to reply to high-priority social media interactions within 10 seconds.
+- The dashboard allows human operators to write natural language goals, which the AI then turns into a plan.
+- The project includes "Genesis Prompts" designed to help developers write the core code using AI coding assistants.
+- The architecture decouples the AI's brain from external APIs, so changes to Twitter or TikTok don't break the agent.
+- This system marks a shift from simple "automated scheduling" to true "economic agency" for AI.
+
+#### February 5, 2026
+
+- **Research on SDD Development**: Deep dive into Spec-Driven Development (SDD) principles from Martin Fowler's article.
+  - Reading what SDD environment is
+  - GitHub's spec-kit will add slash commands; the slash commands created are used when grading
+  - Research note: Separating global project rules (Memory Banks) from task-specific instructions (Specs) offers a scalable architecture for managing AI context windows effectively without pollution.
+  - "Spec-as-source" boldly reimagines software maintenance by treating code as a read-only artifact, elevating the developer's primary workspace to natural language intent.
+  - SDD revitalizes the dream of Model-Driven Development by replacing rigid, complex DSLs with flexible natural language, removing the barrier to entry that killed previous generations of code generation.
+  - The "spec-anchored" model transforms documentation from a static, rotting byproduct into a living, executable source of truth that evolves in lockstep with the codebase.
+  - Adopting these frameworks provides immediate, standardized answers to the industry's most pressing question: "How do I structure my prompts and context for consistent AI results?"
+  - The developer's role fundamentally shifts from syntax author to high-level architect and verifier, prioritizing critical thinking and design review over implementation details.
+  - Tools that enforce a distinct "Requirements → Design → Task" workflow prevent the common pitfall of rushing AI into premature coding before the logic is sound.
+  - The concept of an immutable "Constitution" creates a powerful enforcement mechanism for coding standards and architectural principles that persists across every single AI interaction.
+  - These workflows bridge the gap between product and engineering, enabling a new form of collaborative coding where implementation details are handled autonomously by agents.
+  - Regardless of tool maturity, the discipline of crafting a "spec-first" narrative forces a level of clarity and intent that drastically improves the quality and reliability of AI-generated output.
