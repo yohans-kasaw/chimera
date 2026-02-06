@@ -6,4 +6,5 @@ from pydantic import StringConstraints
 TenantId = Annotated[str, StringConstraints(pattern=r"^t_[a-z0-9_]+$")]
 TraceId = Annotated[str, StringConstraints(min_length=1)]
 TaskId = Annotated[str, StringConstraints(min_length=1)]
+ResultId = Annotated[str, StringConstraints(min_length=1)]
 SessionId = Annotated[str, StringConstraints(min_length=1)]

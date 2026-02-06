@@ -17,6 +17,8 @@ class TaskStatus(StrEnum):
     CANCELLED = "cancelled"
     BLOCKED = "blocked"
     TIMED_OUT = "timed_out"
+    NEEDS_REVIEW = "needs_review"
+    APPROVED = "approved"
 
     @property
     def is_terminal(self) -> bool:
