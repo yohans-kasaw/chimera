@@ -1,4 +1,5 @@
  # chimera
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/yohans-kasaw/chimera?utm_source=oss&utm_medium=github&utm_campaign=yohans-kasaw%2Fchimera&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## CI/CD & Governance
 - **CI pipeline**: Lint, type-check, security checks, spec alignment checks, pre-commit hooks, and tests run on every push/PR via [ .github/workflows/main.yml](.github/workflows/main.yml).
