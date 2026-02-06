@@ -23,9 +23,18 @@ Ambiguity is the enemy. If a request contradicts the spec or if the spec is miss
     *   **Test-Driven Development (TDD):** Write or verify existing failing tests before implementing logic.
     *   Run `make lint`, `make typecheck`, and `make test` to verify changes.
 
-4.  **Security:**
-    *   Never commit secrets.
-    *   Be skeptical of external inputs; ensure validation layers (like the `JudgeAgent`) are respected.
+4.  **Security Architecture Standard (Strict Enforcement):**
+    *   **Mandatory Requirements for all Specs & Architecture Updates:**
+        *   **AuthN/AuthZ:** Define a formal strategy (e.g., OAuth2/JWT) explicitly linked to API contracts.
+        *   **Secrets:** Specify management via Vault or strict Environment Variable injection (no hardcoding).
+        *   **Rate Limiting:** Define per-endpoint limits to prevent abuse.
+        *   **Content Safety:** Detail a moderation pipeline (e.g., "The Judge" agent) for all generative outputs.
+        *   **Agent Containment:** Explicitly define boundaries:
+            *   *Resource Limits:* Max tokens, max budget, timeout policies.
+            *   *Forbidden Actions:* "Kill switches", restricted APIs.
+            *   *Escalation:* Triggers for human-in-the-loop intervention.
+        *   **Sensitive Data:** explicit handling criteria for PII and tokens.
+    *   **Validation:** Reject any Spec or Architecture change that lacks these security details as "Ambiguous/Incomplete".
 
 5.  **Agentic "Skills" vs. "Tools":**
     *   **Skills** (in `src/chimera/skills/`) are internal, reusable functions/classes.

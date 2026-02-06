@@ -99,3 +99,12 @@ As a developer, I want to use decorators to wrap commerce-related functions so t
 - Daily spend limits are denominated in USD (or equivalent stablecoin value).
 - The "day" for limit calculations is defined as a UTC calendar day.
 - Network/gas fees are small enough to be either ignored or handled separately from the main asset transfer amount.
+
+## Security & Compliance *(mandatory)*
+This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
+
+*   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
+*   **Secrets Management**: All credentials managed via Vault/Env.
+*   **Rate Limiting**: Enforces standard 60 req/min limit.
+*   **Content Safety**: Subject to standard Moderation/Judge pipeline.
+*   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).

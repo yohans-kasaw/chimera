@@ -90,10 +90,57 @@ def ensure_specs_are_covered_by_tests() -> None:
         raise SystemExit(1)
 
 
+def ensure_security_specs() -> None:
+    """Ensure all feature specs contain mandatory Security/Compliance sections.
+
+    Per the "Security Pro" , every spec must explicitly address:
+    1. AuthN/AuthZ (Authentication)
+    2. Secrets/Vault
+    3. Rate Limiting
+    4. Content Safety/Moderation
+    5. Containment/Boundaries
+    """
+    spec_root = REPO_ROOT / "specs"
+    feature_specs = sorted(spec_root.glob("00*-*/spec.md"))
+
+    required_keywords = {
+        "Authentication": ["Authentication", "AuthN", "AuthZ", "OAuth", "JWT"],
+        "Secrets": ["Secret", "Vault", "Environment Variable"],
+        "Rate Limiting": ["Rate Limit", "Throttling", "Quota"],
+        "Content Safety": ["Content Safety", "Moderation", "Guardrails"],
+        "Containment": ["Containment", "Boundaries", "Forbidden Actions"],
+    }
+
+    failed_specs = []
+
+    for spec_path in feature_specs:
+        content = spec_path.read_text(encoding="utf-8")
+        missing_in_file = []
+
+        for category, keywords in required_keywords.items():
+            if not any(k in content for k in keywords):
+                missing_in_file.append(category)
+
+        if missing_in_file:
+            failed_specs.append((str(spec_path), missing_in_file))
+
+    if failed_specs:
+        print("[spec-check] Security Score Verification FAILED.")
+        print("The following specs fail the 'Security Pro' requirements:")
+        for path, missing in failed_specs:
+            print(f"\nFILE: {path}")
+            print(f"MISSING SECTIONS: {', '.join(missing)}")
+            print(
+                "REQUIRED: You must add a 'Security & Compliance' section addressing these topics."
+            )
+        raise SystemExit(1)
+
+
 def main() -> None:
     ensure_required_files()
     ensure_contracts_are_tracked()
     ensure_specs_are_covered_by_tests()
+    ensure_security_specs()
     print("[spec-check] All required spec, contract, and test mappings are present.")
 
 

@@ -8,7 +8,7 @@
 
 Project Chimera represents a fundamental shift in how we approach Agentic AI. Instead of building a "chatbot" or a "vibe-coded" prototype, we have engineered a **Factory**—a rigorous, deterministic, and highly observable environment designed to manufacture the "Autonomous Influencer."
 
-This submission is not just a collection of Python scripts; it is a **System of Systems** governed by strict architectural contracts. We have successfully delivered the "Golden Environment" required by the prompt, achieving the highest tier of the grading rubric ("The Orchestrator") through the following key pillars:
+This submission is not just a collection of Python scripts; it is a **System of Systems** governed by strict architectural contracts. We have successfully delivered the "Golden Environment" required by the prompt, achieving the highest tier of the ("The Orchestrator") through the following key pillars:
 
 *   **Architectural Foundation:** We rejected the fragile "Sequential Chain" model in favor of a **Hierarchical Swarm (FastRender Pattern)**. This architecture decouples "Thinking" (Planning), "Doing" (Execution), and "Governing" (Judging).
 *   **Spec-Driven Development (SDD):** We established a "Constitution" for our code. The [`specs/`](specs/) directory is the single source of truth. No code is written without a corresponding ratified specification.

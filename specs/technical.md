@@ -40,3 +40,39 @@ The CI/CD pipeline enforces spec fidelity, code quality, and security checks.
 *   **Docker parity**: Tests are executed in Docker to ensure environment consistency (see [Dockerfile](../Dockerfile))
 *   **Local infra**: Development dependencies run via Docker Compose (see [docker-compose.yml](../docker-compose.yml))
 *   **AI review policy**: Automated review guidance for spec alignment and security is defined in [ .coderabbit.yaml](../.coderabbit.yaml)
+
+## Security Architecture & Compliance (Rubric: Pro)
+This section defines the mandatory security layer for all Chimera agents.
+
+### Authentication & Authorization Strategy
+*   **Strategy**: Federated OAuth2 with JWT (JSON Web Tokens).
+*   **Implementation**:
+    *   **Service-to-Service**: Mutual TLS (mTLS) or Signed JWTs via `internal_keys`.
+    *   **User-to-Agent**: Bearer Tokens (OAuth2) validated against the Identity Provider (IdP).
+*   **Enforcement**: All API Contracts (see Section 1) must define `securitySchemes` in their OpenAPI specs.
+    *   *Constraint*: No endpoint may be `public` without explicit justification in `specs/functional.md`.
+
+### Secrets Management
+*   **Vault**: All high-entropy secrets (Private Keys, API Tokens) must be stored in the **CommerceManager Vault** (HashiCorp Vault compatible) or injected via **Environment Variables** (`os.getenv`).
+*   **Forbidden**: Hardcoding secrets in source code is strictly prohibited and detected by `bandit`.
+
+### Rate Limiting & Resource Containment
+*   **Per-Endpoint Limits**: All APIs must enforce strict rate limits (Token Bucket algorithm).
+    *   *Default*: 60 requests/minute per Tenant.
+    *   *Commerce*: 10 transactions/minute.
+*   **Agent Containment**:
+    *   **Execution Time**: Max 60s per reasoning loop.
+    *   **Token Budget**: Max 8k input tokens / 2k output tokens per turn.
+    *   **Recursion Limit**: Max depth of 5 sub-tasks.
+
+### Content Safety & Moderation
+*   **The Judge**: A mandatory "Safety Layer" (see `specs/001-prod-stability-safety`) intercepts all Agent outputs.
+*   **Pipeline**:
+    1.  **Input Guard**: Regex/Keyword filter for PII (SSN, Email) sanitization.
+    2.  **Logic Core**: LLM generation.
+    3.  **Output Guard**: Semantic evaluation (Confidence < 0.7 -> REJECT).
+*   **Escalation**: Any content flagged as "Harmful" triggers a `HUMAN_INTERVENTION_REQUIRED` event.
+
+### Sensitive Data Handling
+*   **PII Policy**: No PII (Personally Identifiable Information) may be stored in `Weaviate` (Long-term memory).
+*   **Token Redaction**: Logs must mask all tokens (e.g., `sk-****`).

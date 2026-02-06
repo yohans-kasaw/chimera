@@ -53,7 +53,19 @@ The Agent is **strictly prohibited** from:
 4.  **Deleting Data**: NEVER execute `DROP TABLE` or recursive `rm` on non-temp directories without confirmation.
 5.  **Phantom Files**: Do not create files outside the `specs/` or `src/` hierarchy defined in the Architecture docs.
 
-### 3.2. Ambiguity Handling & Escalation
+### 3.2 Security Specification Standards 
+All new Features and Architecture changes MUST include a dedicated Security Section addressing:
+1.  **AuthN/AuthZ**: Formal strategy (OAuth2/JWT) linked to specific API contracts/endpoints.
+2.  **Secrets Management**: Explicit Vault/Env-var strategy.
+3.  **Rate Limiting**: Defined per-endpoint limits.
+4.  **Content Safety**: Detailed moderation pipeline (input/output filters).
+5.  **Agent Containment**:
+    *   *Resource Limits*: Budget/Token caps.
+    *   *Forbidden Actions*: Hard boundaries.
+    *   *Escalation*: Human intervention triggers.
+6.  **Data Privacy**: PII and Token handling protocols.
+
+### 3.3. Ambiguity Handling & Escalation
 If an Agent encounters ambiguity (e.g., missing type definition, vague business logic):
 1.  **SEARCH**: Glob `specs/` for keywords.
 2.  **ANALYZE**: Check existing patterns in `src/`.

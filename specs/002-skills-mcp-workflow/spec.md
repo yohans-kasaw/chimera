@@ -72,3 +72,12 @@ Agent Intent
 - Skill registry supports registration and discovery by name.
 - Workflow runner executes ordered steps and returns structured run records.
 - MCP tool skill must enforce that a configured MCP client is required.
+
+## Security & Compliance *(mandatory)*
+This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
+
+*   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
+*   **Secrets Management**: All credentials managed via Vault/Env.
+*   **Rate Limiting**: Enforces standard 60 req/min limit.
+*   **Content Safety**: Subject to standard Moderation/Judge pipeline.
+*   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).

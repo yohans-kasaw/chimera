@@ -119,3 +119,12 @@ As an operator, I can continue operating a tenant swarm even when individual age
 - **SC-004**: Cross-tenant data or action leakage incidents are 0 in acceptance testing and ongoing monitoring.
 - **SC-005**: After a single-agent failure, affected workflows resume or halt with a clear operator-visible reason within 60 seconds.
 - **SC-006**: For a completed swarm session, the operator can reconcile the final reported state to the full auditable event history with no unexplained state changes.
+
+## Security & Compliance *(mandatory)*
+This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
+
+*   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
+*   **Secrets Management**: All credentials managed via Vault/Env.
+*   **Rate Limiting**: Enforces standard 60 req/min limit.
+*   **Content Safety**: Subject to standard Moderation/Judge pipeline.
+*   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).

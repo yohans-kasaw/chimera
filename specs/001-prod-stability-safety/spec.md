@@ -89,3 +89,12 @@ A human operator reviews a flagged task on an administrative dashboard. They fin
 - **SC-003**: 0% of tasks held for review proceed to execution before an explicit approval action is received.
 - **SC-004**: System recovery from a 1,000-agent reconnection storm (simultaneous login) occurs in under 30 seconds.
 - **SC-005**: The system maintains 99.9% task delivery guarantees under the peak load of 1,000 agents.
+
+## Security & Compliance *(mandatory)*
+This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
+
+*   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
+*   **Secrets Management**: All credentials managed via Vault/Env.
+*   **Rate Limiting**: Enforces standard 60 req/min limit.
+*   **Content Safety**: Subject to standard Moderation/Judge pipeline.
+*   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).

@@ -95,3 +95,12 @@ As a Chimera Worker, I want to use the MCPClient to augment my perception of the
 - Stdio is the primary transport method for this initial implementation.
 - The mock MCP server will be implemented as a separate Python script used during testing.
 - Pydantic v2 will be used for all internal and external data models.
+
+## Security & Compliance *(mandatory)*
+This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
+
+*   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
+*   **Secrets Management**: All credentials managed via Vault/Env.
+*   **Rate Limiting**: Enforces standard 60 req/min limit.
+*   **Content Safety**: Subject to standard Moderation/Judge pipeline.
+*   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).
