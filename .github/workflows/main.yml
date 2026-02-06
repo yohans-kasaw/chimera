@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-type-test:
+    name: Lint, type, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: |
+          if [ -f uv.lock ]; then
+            uv sync --frozen
+          else
+            uv sync
+          fi
+      - name: Lint
+        run: make lint
+      - name: Type check
+        run: make typecheck
+      - name: Security checks
+        run: make security
+      - name: Tests
+        run: make test
+
+  docker-tests:
+    name: Dockerized tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build test image
+        run: docker build -t chimera-ci .
+      - name: Run tests in container
+        run: docker run --rm chimera-ci

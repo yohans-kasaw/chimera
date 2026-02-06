@@ -1,0 +1,11 @@
+review:
+  profile: "chill"
+  auto: true
+  high_level_summary: true
+  request_changes_workflow: true
+  extra_instructions:
+    - "Verify changes align with specs/ and do not contradict the SRS or technical spec."
+    - "Flag any missing tests or coverage regressions for new logic."
+    - "Check for security risks, especially input validation and unsafe external calls."
+    - "Ensure public APIs have Google-style docstrings with Args/Returns/Raises."
+    - "Enforce strict typing; disallow Any without a justification comment."
