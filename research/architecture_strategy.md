@@ -197,3 +197,24 @@ The dependency structure implies a "Core-First" rollout strategy.
     *   Rate limit tuning across all MCP servers.
     *   Security audits (Wallet & Injection attacks).
     *   "Trend Spotter" fully automated automation.
+
+## 7. Skills + Workflow Layer (New)
+
+### Purpose
+Skills provide the abstraction between high-level agent intent and executable system logic. Workflows define deterministic sequences of skills that can be invoked by planners or operator tools.
+
+### Placement in the Stack
+The Skills layer sits between the Agent Layer and Workflow Layer, translating intent into pipelines and MCP tool calls.
+
+```
+Agent Intent
+    -> Skill Invocation (validated input/output contracts)
+        -> Workflow Runner (ordered steps)
+            -> MCP Client / Providers (external tools)
+```
+
+### Design Commitments
+* **Contracts First**: Every skill must declare Pydantic input/output models.
+* **MCP-First**: External tools are accessed via MCP client abstractions.
+* **Registry**: Skills are discoverable via an in-memory registry for planner/CLI use.
+* **Traceable**: Every skill run emits a structured record for audit trails.

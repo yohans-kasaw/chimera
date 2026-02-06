@@ -18,6 +18,20 @@
 - `make pre-commit` — run all pre-commit hooks across the repo
 - `make spec-check` — verify specs, contracts, and test coverage mapping
 
+## Skills, Workflows, and MCP
+Project Chimera uses a Skills framework to bridge agent intent to executable workflows.
+
+- Skills base + models: [src/chimera/skills](src/chimera/skills)
+- Sample skills + workflow builder: [src/chimera/skills/samples.py](src/chimera/skills/samples.py)
+- Workflow runner: [src/chimera/skills/workflow.py](src/chimera/skills/workflow.py)
+- Pipeline wrapper: [src/chimera/pipelines/skills_workflow.py](src/chimera/pipelines/skills_workflow.py)
+- MCP sample configuration: [mcp.sample.json](mcp.sample.json)
+
+The Skills workflow ties into the MCP client abstraction so tools remain externalized.
+See the spec for the implementation contract and planned steps.
+
+To enable local MCP tooling, copy [mcp.sample.json](mcp.sample.json) to mcp.json and replace the placeholder server entries with your real MCP servers.
+
 ## Docker
 - `docker build -t chimera-ci .`
 - `docker run --rm chimera-ci`

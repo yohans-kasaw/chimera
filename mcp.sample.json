@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "chimera-local-tools": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["path/to/mcp_server.py"],
+      "env": {}
+    },
+    "chimera-remote": {
+      "type": "http",
+      "url": "https://mcp.example.com",
+      "headers": {
+        "X-API-Key": "REPLACE_ME"
+      }
+    }
+  }
+}

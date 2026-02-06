@@ -8,6 +8,7 @@ This directory contains the specifications for Project Chimera, structured by fe
 *   **[001-observable-mcp-swarm](./001-observable-mcp-swarm/spec.md)**: Specifications for the core swarm architecture, observability, and tenant isolation.
 *   **[001-mcp-client](./001-mcp-client/spec.md)**: Specifications for the MCP Client integration.
 *   **[001-prod-stability-safety](./001-prod-stability-safety/spec.md)**: Specifications for production stability and safety mechanisms.
+*   **[002-skills-mcp-workflow](./002-skills-mcp-workflow/spec.md)**: Specifications for the Skills framework, workflows, and MCP tool bindings.
 
 ## Executable Specifications
 

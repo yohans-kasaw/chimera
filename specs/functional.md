@@ -25,3 +25,14 @@ As an operator, I can rely on a Judge-led security gate to evaluate sensitive or
 
 #### Recover from Failures Without State Corruption (P3)
 As an operator, I can continue operating a tenant swarm even when individual agents fail so that long-running workflows complete reliably and the system maintains guaranteed state integrity.
+
+### Skills & MCP Workflows
+
+#### Declarative Skills Registry (P1)
+As a developer, I want to register skills with explicit input/output contracts so that planners can invoke them safely and consistently.
+
+#### Workflow Composition (P1)
+As a planner, I want to chain skills into repeatable workflows so that multi-step tasks are executed deterministically.
+
+#### MCP Tool Binding (P2)
+As an operator, I want skills to invoke MCP tools through a standard client so that external integrations remain decoupled from core logic.

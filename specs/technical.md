@@ -23,6 +23,9 @@ data structures for the system.
 ## Protocol Definitions
 *   **OpenClaw Agent Protocol**: [contracts/openclaw.yaml](./001-observable-mcp-swarm/contracts/openclaw.yaml)
 
+## Skills & Workflow Specifications
+*   **Skills + MCP Workflow Spec**: [002-skills-mcp-workflow/spec.md](./002-skills-mcp-workflow/spec.md)
+
 ## CI/CD & Governance
 The CI/CD pipeline enforces spec fidelity, code quality, and security checks.
 
