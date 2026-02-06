@@ -5,7 +5,6 @@ https://drive.google.com/file/d/1akZ-9NEX8JVRHcahUTT1bbwNIusxNe9w/view?usp=shari
 
  # Project Chimera: Autonomous Influencer Factory
 
-![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/yohans-kasaw/chimera?utm_source=oss&utm_medium=github&utm_campaign=yohans-kasaw%2Fchimera&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 
 ## Project Status: The Orchestrator Phase (Day 3 Ready)
 
