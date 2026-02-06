@@ -1,0 +1,32 @@
+erDiagram
+    BudgetConfiguration {
+        UUID id PK
+        string tenant_id
+        decimal daily_limit_usd
+        string currency
+        bool is_active
+    }
+
+    TransactionRecord {
+        UUID id PK
+        string trace_id
+        string agent_id
+        datetime timestamp
+        string tool_name
+        decimal amount_asset
+        string asset_symbol
+        decimal amount_usd
+        decimal network_fee_usd
+        string status
+        string rejection_reason
+        json mcp_response
+    }
+
+    SpendTracker {
+        string key PK "chimera:spend:{tenant}:{date}"
+        decimal value "Cumulative USD Spend"
+        int ttl
+    }
+
+    BudgetConfiguration ||--o{ TransactionRecord : "governs"
+    TransactionRecord }|--|| SpendTracker : "updates"

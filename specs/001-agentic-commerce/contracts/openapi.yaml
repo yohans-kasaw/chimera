@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Agentic Commerce API
+  version: 0.1.0
+  description: |
+    API for the CommerceManager, handling secure asset transfers, budget enforcement,
+    and wallet interactions for the Chimera system.
+servers:
+  - url: http://localhost:8001
+paths:
+  /balance/{asset_id}:
+    get:
+      summary: Get Asset Balance
+      operationId: getBalance
+      parameters:
+        - name: asset_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "ETH"
+          description: The asset symbol or identifier.
+      responses:
+        '200':
+          description: Current balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  asset_id:
+                    type: string
+                  amount:
+                    type: string
+                    format: decimal
+                  usd_value:
+                    type: string
+                    format: decimal
+  
+  /transfer:
+    post:
+      summary: Execute Asset Transfer
+      operationId: executeTransfer
+      description: |
+        Requests an asset transfer. This operation is subject to the CFO Judge's
+        budget approval (FR-005).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionRecord'
+        '403':
+          description: Budget violation or Policy rejection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /budget:
+    get:
+      summary: Get Budget Status
+      operationId: getBudgetStatus
+      responses:
+        '200':
+          description: Current daily spend and limit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BudgetStatus'
+
+components:
+  schemas:
+    TransferRequest:
+      type: object
+      required: [asset_id, amount, destination_address]
+      properties:
+        asset_id:
+          type: string
+          example: "USDC"
+        amount:
+          type: string
+          format: decimal
+          example: "50.00"
+        destination_address:
+          type: string
+          example: "0x123..."
+        trace_id:
+          type: string
+          description: optional correlation ID
+    
+    TransactionRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [PENDING, APPROVED, REJECTED, EXECUTED, FAILED]
+        amount_usd:
+          type: number
+          format: float
+        timestamp:
+          type: string
+          format: date-time
+        tx_hash:
+          type: string
+          description: On-chain transaction hash if executed
+
+    BudgetStatus:
+      type: object
+      properties:
+        daily_limit_usd:
+          type: number
+        current_daily_spend_usd:
+          type: number
+        remaining_budget_usd:
+          type: number
+        reset_time:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object

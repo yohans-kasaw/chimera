@@ -1,0 +1,39 @@
+erDiagram
+    Tenant {
+        string tenant_id PK
+        datetime created_at
+    }
+
+    SwarmSession {
+        string session_id PK
+        string tenant_id FK
+        string state
+        datetime created_at
+        datetime updated_at
+    }
+
+    Task {
+        string task_id PK
+        string tenant_id FK
+        string session_id FK
+        string trace_id
+        string parent_task_id
+        string kind
+        json input
+        string status
+        int priority
+        int attempt
+    }
+
+    Result {
+        string task_id FK
+        string status
+        json output
+        string produced_by
+    }
+
+    Tenant ||--o{ SwarmSession : "owns"
+    Tenant ||--o{ Task : "tracks"
+    SwarmSession ||--o{ Task : "executes"
+    Task ||--|| Result : "produces"
+    Task ||--o{ Task : "sub-tasks"

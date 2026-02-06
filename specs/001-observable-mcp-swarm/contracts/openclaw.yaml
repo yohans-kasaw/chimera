@@ -1,0 +1,75 @@
+openclaw: 1.0.0
+info:
+  title: OpenClaw Agent Protocol
+  version: 0.1.0
+  description: |
+    Protocol definition for communication between the Swarm Brain (Orchestrator) 
+    and distributed Agent Nodes (Claws).
+    
+    This protocol defines the message structure for task assignment, status reporting,
+    and capability advertisement over the message bus (e.g., NATS/Redis/Kafka).
+
+channels:
+  agent.heartbeat:
+    publish:
+      summary: Agent liveness check
+      message:
+        $ref: '#/components/messages/Heartbeat'
+
+  agent.assign:
+    subscribe:
+      summary: Task assignment to specific agent
+      message:
+        $ref: '#/components/messages/TaskAssignment'
+
+  agent.event:
+    publish:
+      summary: Task progress and result events
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TaskStarted'
+          - $ref: '#/components/messages/TaskProgress'
+          - $ref: '#/components/messages/TaskCompleted'
+          - $ref: '#/components/messages/TaskFailed'
+
+components:
+  messages:
+    Heartbeat:
+      payload:
+        agent_id: string
+        status: string
+        capabilities: [string]
+        load: number
+        timestamp: string
+
+    TaskAssignment:
+      payload:
+        task_id: string
+        input: object
+        context: object
+        deadline: string
+
+    TaskStarted:
+      payload:
+        task_id: string
+        agent_id: string
+        timestamp: string
+
+    TaskProgress:
+      payload:
+        task_id: string
+        progress_percent: integer
+        status_message: string
+        
+    TaskCompleted:
+      payload:
+        task_id: string
+        result: object
+        metrics: object
+
+    TaskFailed:
+      payload:
+        task_id: string
+        error_code: string
+        error_message: string
+        retryable: boolean
