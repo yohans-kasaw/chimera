@@ -12,9 +12,14 @@ supporting services.
 *   **Swarm Management API**: [contracts/openapi.yaml](./001-observable-mcp-swarm/contracts/openapi.yaml)
 *   **Review Service API (HITL)**: [contracts/review_api.yaml](./001-prod-stability-safety/contracts/review_api.yaml)
 
-## Database Schema (ERD)
-The following Entity Relationship Diagrams and data models define the core
-data structures for the system.
+## Database Architecture & Schema
+The Master Data Specification defines the unified architecture across PostgreSQL, Redis, and Weaviate.
+
+*   **Master Data Spec**: [data-architecture.md](./data-architecture.md)
+*   **Backend Architecture & Agent Framework**: [backend-architecture.md](./backend-architecture.md)
+
+### Domain-Specific Models (Reference)
+The following diagrams provide focused views on specific domains, but are subordinate to the Master Data Spec.
 
 *   **Commerce Data Model**: [data-model.mermaid](./001-agentic-commerce/data-model.mermaid)
 *   **Swarm Data Model**: [data-model.mermaid](./001-observable-mcp-swarm/data-model.mermaid)

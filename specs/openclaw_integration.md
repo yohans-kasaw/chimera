@@ -29,3 +29,11 @@ Throughout the lifecycle of an assigned task, Chimera publishes events to `agent
 ## Data Mapping
 *   **Capabilities**: Mapped from the internal `Skills` registry.
 *   **Agent ID**: Corresponds to the Tenant ID or specific Agent Node ID within Chimera.
+
+## MoltBook Integration via OpenClaw
+While Chimera can connect directly to MoltBook, it prefers to advertise "Influencer" capabilities via OpenClaw to receive contracts.
+
+### Workflow: Sponsored Post
+1.  **Contract**: External brand sends `TaskAssignment` via OpenClaw with type `moltbook_sponsored_post`.
+2.  **Execution**: Chimera Agent accepts, generates content, and uses the `MoltBookPost` skill.
+3.  **Proof**: Chimera returns the `post_id` and `analytics_snapshot` as the OpenClaw Task Result.
