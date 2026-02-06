@@ -12,6 +12,13 @@ A robust engineering environment where:
 2.  **Infrastructure as Code**: CI/CD, Tests, and Docker ensure reliability.
 3.  **Traceability**: Every action is logged and observable.
 
+## CI/CD Governance
+The repository enforces automated governance through GitHub Actions and AI review rules:
+
+*   **CI workflows**: [ .github/workflows/main.yml](../.github/workflows/main.yml) and [ .github/workflows/coverage.yml](../.github/workflows/coverage.yml)
+*   **Dockerized tests**: [Dockerfile](../Dockerfile)
+*   **AI review policy**: [ .coderabbit.yaml](../.coderabbit.yaml)
+
 ## The Goal
 A repository so well-architected, specified, and tooled that a swarm of AI agents could enter the codebase and build the final features with minimal human conflict.
 
