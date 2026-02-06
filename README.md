@@ -54,10 +54,18 @@ Project Chimera uses a Skills framework to bridge agent intent to executable wor
 - Pipeline wrapper: [src/chimera/pipelines/skills_workflow.py](src/chimera/pipelines/skills_workflow.py)
 - MCP sample configuration: [mcp.sample.json](mcp.sample.json)
 
+### MCP Configuration (Versioned)
+
+- Primary MCP registry (committed): [mcp.json](mcp.json)
+- Config schema (validation): [mcp.schema.json](mcp.schema.json)
+- Documentation: [specs/mcp_configuration.md](specs/mcp_configuration.md)
+
 The Skills workflow ties into the MCP client abstraction so tools remain externalized.
 See the spec for the implementation contract and planned steps.
 
-To enable local MCP tooling, copy [mcp.sample.json](mcp.sample.json) to mcp.json and replace the placeholder server entries with your real MCP servers.
+To enable local MCP tooling, ensure required env vars are set (see `specs/mcp_configuration.md`) and validate the config:
+
+- `python scripts/validate_mcp_config.py`
 
 ## Docker
 - `docker build -t chimera-ci .`

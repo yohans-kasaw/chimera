@@ -1,17 +1,73 @@
 {
+  "$schema": "./mcp.schema.json",
+  "mcp_version": "1.0.0",
+  "config_version": "1.0.0",
+  "project": "Chimera",
+  "description": "Sample MCP config. Copy to mcp.json and replace server details. Do not commit real secrets.",
+  "defaults": {
+    "request_timeout_ms": 30000,
+    "connect_timeout_ms": 10000,
+    "retries": 1
+  },
   "servers": {
-    "chimera-local-tools": {
-      "type": "stdio",
-      "command": "python",
-      "args": ["path/to/mcp_server.py"],
-      "env": {}
+    "example-stdio": {
+      "description": "Example local MCP server launched via stdio.",
+      "transport": "stdio",
+      "stdio": {
+        "command": "python",
+        "args": ["path/to/mcp_server.py"],
+        "cwd": "."
+      },
+      "auth": {
+        "type": "none",
+        "required": [],
+        "optional": [],
+        "notes": "Local servers often require no auth, but can still rely on env vars."
+      },
+      "tools": [
+        {
+          "name": "echo",
+          "description": "Echo a message.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["msg"],
+            "properties": {"msg": {"type": "string"}}
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["msg"],
+            "properties": {"msg": {"type": "string"}}
+          }
+        }
+      ],
+      "documentation_url": "specs/mcp_configuration.md"
     },
-    "chimera-remote": {
-      "type": "http",
-      "url": "https://mcp.example.com",
-      "headers": {
-        "X-API-Key": "REPLACE_ME"
-      }
+    "example-http": {
+      "description": "Example remote MCP server over HTTP.",
+      "transport": "http",
+      "http": {
+        "url": "https://mcp.example.com",
+        "headers": {
+          "X-API-Key": "${MCP_API_KEY}"
+        }
+      },
+      "auth": {
+        "type": "headers",
+        "required": ["MCP_API_KEY"],
+        "optional": [],
+        "notes": "If your MCP host uses header-based auth, inject the secret via env and expand it in your launcher."
+      },
+      "tools": [
+        {
+          "name": "list_widgets",
+          "description": "List widgets from the remote service.",
+          "input_schema": {"type": "object", "additionalProperties": false, "properties": {}},
+          "output_schema": {"type": "object", "additionalProperties": true}
+        }
+      ],
+      "documentation_url": "specs/mcp_configuration.md"
     }
   }
 }

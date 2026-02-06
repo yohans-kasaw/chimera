@@ -65,7 +65,9 @@ Agent Intent
 ## Implementation Mapping
 - Skills package: [src/chimera/skills](../../src/chimera/skills)
 - Workflow pipeline: [src/chimera/pipelines/skills_workflow.py](../../src/chimera/pipelines/skills_workflow.py)
-- MCP sample configuration: [mcp.sample.json](../../mcp.sample.json)
+- MCP registry (committed): [mcp.json](../../mcp.json)
+- MCP schema (validation): [mcp.schema.json](../../mcp.schema.json)
+- MCP docs: [specs/mcp_configuration.md](../mcp_configuration.md)
 
 ## Acceptance Criteria (Gherkin)
 
@@ -100,6 +102,14 @@ Agent Intent
     *   **Given** an `MCPSkill` configured for tool "weather"
     *   **When** I execute it without an active `MCPClient`
     *   **Then** a `RuntimeError` is raised "MCP Client not configured"
+
+### AC-005: MCP Configuration Is Self-Documenting (Happy Path)
+*   **Trace**: [MCP Configuration]
+*   **Scenario**: Validate MCP Registry
+    *   **Given** the repository contains `mcp.json` and `mcp.schema.json`
+    *   **When** I run `python scripts/validate_mcp_config.py`
+    *   **Then** configuration validation succeeds
+    *   **And** each configured server defines at least one tool with `input_schema` and `output_schema`
 
 ## Security & Compliance *(mandatory)*
 This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).

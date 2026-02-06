@@ -60,6 +60,8 @@
 - **FR-007**: System MUST include a comprehensive test suite with a mock MCP server implementation for verification.
 - **FR-008**: System MUST support MCP 1.0.
 - **FR-009**: MCPClient MUST manage connection lifecycle using an asynchronous context manager to ensure resource cleanup.
+- **FR-010**: System MUST provide a versioned, committed MCP configuration registry that defines (a) connection details and (b) tool input/output schemas for all required external services. (Acceptance: `mcp.json` + `mcp.schema.json` + `specs/mcp_configuration.md` exist and validate.)
+- **FR-011**: System MUST validate MCP configuration structure to prevent ambiguous agent execution. (Acceptance: `python scripts/validate_mcp_config.py` succeeds in CI/local.)
 
 ### Key Entities *(include if feature involves data)*
 
@@ -85,3 +87,13 @@ This feature adheres to the [Master Security Architecture](../technical.md#7-sec
 *   **Rate Limiting**: Enforces standard 60 req/min limit.
 *   **Content Safety**: Subject to standard Moderation/Judge pipeline.
 *   **Containment**: Strict Resource Limits apply (Execution Time, Token Budget).
+
+## MCP Configuration (Normative)
+
+This feature depends on the project-level MCP server registry:
+
+- Registry: `mcp.json`
+- Schema: `mcp.schema.json`
+- Docs: `specs/mcp_configuration.md`
+
+All MCP server entries MUST include explicit tool schemas to enable autonomous agent execution without ambiguity.

@@ -59,6 +59,22 @@ def ensure_contracts_are_tracked() -> None:
     _fail_if_missing("executable contract files", contracts)
 
 
+def ensure_mcp_configuration() -> None:
+    """Ensure MCP configuration is present and versioned.
+
+    Rubric expectation:
+    - versioned, self-documenting MCP configuration in-repo
+    - explicitly defines connection details and tool schemas
+    """
+
+    required = [
+        REPO_ROOT / "mcp.json",
+        REPO_ROOT / "mcp.schema.json",
+        REPO_ROOT / "specs" / "mcp_configuration.md",
+    ]
+    _fail_if_missing("MCP configuration", required)
+
+
 def ensure_specs_are_covered_by_tests() -> None:
     """Ensure each feature spec has at least one corresponding test module.
 
@@ -170,6 +186,7 @@ def ensure_acceptance_criteria() -> None:
 def main() -> None:
     ensure_required_files()
     ensure_contracts_are_tracked()
+    ensure_mcp_configuration()
     ensure_specs_are_covered_by_tests()
     ensure_security_specs()
     ensure_acceptance_criteria()

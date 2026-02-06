@@ -29,6 +29,14 @@ The following diagrams provide focused views on specific domains, but are subord
 ## Protocol Definitions
 *   **OpenClaw Agent Protocol**: [contracts/openclaw.yaml](./001-observable-mcp-swarm/contracts/openclaw.yaml)
 
+## MCP Configuration (External Tools)
+
+Chimera's external tool/services layer is declared as a **versioned MCP server registry**.
+
+*   **MCP Configuration**: [mcp_configuration.md](./mcp_configuration.md)
+*   **Registry (JSON)**: [`mcp.json`](../mcp.json)
+*   **Registry Schema**: [`mcp.schema.json`](../mcp.schema.json)
+
 ## Skills & Workflow Specifications
 *   **Skills + MCP Workflow Spec**: [002-skills-mcp-workflow/spec.md](./002-skills-mcp-workflow/spec.md)
 

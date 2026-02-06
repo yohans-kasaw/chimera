@@ -1,68 +1,365 @@
 {
+  "$schema": "./mcp.schema.json",
   "mcp_version": "1.0.0",
+  "config_version": "1.0.0",
   "project": "Chimera",
-  "description": "Production MCP Configuration for the Chimera Autonomous Influencer Swarm.",
+  "description": "Versioned, self-documenting MCP server registry for Chimera. This file is safe to commit: it never contains real secrets, only environment variable names.",
+  "defaults": {
+    "request_timeout_ms": 30000,
+    "connect_timeout_ms": 10000,
+    "retries": 1
+  },
   "servers": {
     "chimera-memory": {
-      "description": "Long-term memory and RAG capabilities backed by Weaviate.",
+      "description": "Long-term memory and RAG tools backed by Weaviate.",
       "transport": "stdio",
-      "command": "python",
-      "args": ["src/chimera/mcp_servers/memory.py"],
-      "env": {
-        "WEAVIATE_URL": "WEAVIATE_URL",
-        "WEAVIATE_API_KEY": "WEAVIATE_API_KEY"
+      "stdio": {
+        "command": "python",
+        "args": ["src/chimera/mcp_servers/memory.py"],
+        "cwd": "."
       },
-      "capabilities": [
-        "remember_fact(content, tags)",
-        "recall_context(query, limit)",
-        "search_knowledge_base(query)"
+      "auth": {
+        "type": "env",
+        "required": ["WEAVIATE_URL"],
+        "optional": ["WEAVIATE_API_KEY"],
+        "notes": "WEAVIATE_API_KEY is only required for secured clusters. WEAVIATE_URL defaults should be provided by the runtime environment (Docker Compose, CI, or local export)."
+      },
+      "upstreams": [
+        {
+          "name": "weaviate",
+          "type": "http",
+          "base_url_env": "WEAVIATE_URL"
+        }
       ],
-      "documentation_url": "specs/data-architecture.md"
+      "tools": [
+        {
+          "name": "remember_fact",
+          "description": "Persist a memory item for later retrieval (tenant-safe; no PII).",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["content"],
+            "properties": {
+              "content": {"type": "string", "minLength": 1},
+              "tags": {"type": "array", "items": {"type": "string"}, "default": []}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["id"],
+            "properties": {
+              "id": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "recall_context",
+          "description": "Retrieve top-N relevant memory snippets for a query.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["query"],
+            "properties": {
+              "query": {"type": "string", "minLength": 1},
+              "limit": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["items"],
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "required": ["content"],
+                  "properties": {
+                    "content": {"type": "string"},
+                    "score": {"type": "number"},
+                    "metadata": {"type": "object"}
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "search_knowledge_base",
+          "description": "Search memory/knowledge base for matching documents.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["query"],
+            "properties": {
+              "query": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["results"],
+            "properties": {
+              "results": {"type": "array"}
+            }
+          }
+        }
+      ],
+      "documentation_url": "specs/mcp_configuration.md"
     },
     "chimera-commerce": {
-      "description": "Financial autonomy and wallet management backed by Coinbase AgentKit.",
+      "description": "Financial autonomy and wallet management backed by Coinbase CDP AgentKit.",
       "transport": "stdio",
-      "command": "python",
-      "args": ["src/chimera/mcp_servers/commerce.py"],
-      "env": {
-        "CDP_API_KEY_NAME": "CDP_API_KEY_NAME",
-        "CDP_API_KEY_PRIVATE_KEY": "CDP_API_KEY_PRIVATE_KEY"
+      "stdio": {
+        "command": "python",
+        "args": ["src/chimera/mcp_servers/commerce.py"],
+        "cwd": "."
       },
-      "capabilities": [
-        "get_wallet_balance(asset_id)",
-        "transfer_asset(amount, asset_id, destination)",
-        "get_transaction_status(tx_hash)"
+      "auth": {
+        "type": "env",
+        "required": ["CDP_API_KEY_NAME", "CDP_API_KEY_PRIVATE_KEY"],
+        "optional": [],
+        "notes": "CDP_API_KEY_PRIVATE_KEY must be a private key string. Never commit it. Prefer injecting via CI secrets or local env/.env."
+      },
+      "upstreams": [
+        {
+          "name": "coinbase_cdp_agentkit",
+          "type": "vendor_sdk",
+          "notes": "Uses Coinbase CDP AgentKit SDK for chain RPC and signing. Network selection is an implementation detail of the commerce server."
+        }
+      ],
+      "tools": [
+        {
+          "name": "get_wallet_balance",
+          "description": "Get wallet balance for a given asset identifier.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asset_id"],
+            "properties": {
+              "asset_id": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["asset_id", "balance"],
+            "properties": {
+              "asset_id": {"type": "string"},
+              "balance": {"type": "string"},
+              "currency": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "transfer_asset",
+          "description": "Transfer an amount of an asset to a destination address/identifier.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["amount", "asset_id", "destination"],
+            "properties": {
+              "amount": {"type": ["number", "string"], "minLength": 1},
+              "asset_id": {"type": "string", "minLength": 1},
+              "destination": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["tx_hash"],
+            "properties": {
+              "tx_hash": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "get_transaction_status",
+          "description": "Get transaction status for a previously-submitted transfer.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tx_hash"],
+            "properties": {
+              "tx_hash": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["status"],
+            "properties": {
+              "status": {"type": "string"},
+              "confirmations": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
       ],
       "documentation_url": "specs/001-agentic-commerce/spec.md"
     },
     "chimera-social": {
-      "description": "Social network integration for MoltBook and Twitter/X.",
+      "description": "Social network integration tools for MoltBook and Twitter/X.",
       "transport": "stdio",
-      "command": "python",
-      "args": ["src/chimera/mcp_servers/social.py"],
-      "env": {
-        "MOLTBOOK_API_KEY": "MOLTBOOK_API_KEY",
-        "TWITTER_BEARER_TOKEN": "TWITTER_BEARER_TOKEN"
+      "stdio": {
+        "command": "python",
+        "args": ["src/chimera/mcp_servers/social.py"],
+        "cwd": "."
       },
-      "capabilities": [
-        "post_content(platform, text, media_urls)",
-        "reply_to_post(platform, post_id, text)",
-        "fetch_feed(platform, limit)"
+      "auth": {
+        "type": "env",
+        "required": [],
+        "optional": ["MOLTBOOK_API_KEY", "TWITTER_BEARER_TOKEN"],
+        "notes": "A platform is only usable if its corresponding credential is present. Prefer per-tenant secrets in a vault; this config only documents variable names."
+      },
+      "upstreams": [
+        {"name": "moltbook", "type": "http", "notes": "Endpoint configured inside social server (not yet implemented)."},
+        {"name": "twitter", "type": "http", "notes": "Uses Twitter/X APIs via bearer token."}
+      ],
+      "tools": [
+        {
+          "name": "post_content",
+          "description": "Create a post on a social platform.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["platform", "text"],
+            "properties": {
+              "platform": {"type": "string", "enum": ["moltbook", "twitter"]},
+              "text": {"type": "string", "minLength": 1},
+              "media_urls": {"type": "array", "items": {"type": "string"}, "default": []}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["post_id"],
+            "properties": {
+              "post_id": {"type": "string"},
+              "url": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "reply_to_post",
+          "description": "Reply to an existing post.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["platform", "post_id", "text"],
+            "properties": {
+              "platform": {"type": "string", "enum": ["moltbook", "twitter"]},
+              "post_id": {"type": "string", "minLength": 1},
+              "text": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["reply_id"],
+            "properties": {
+              "reply_id": {"type": "string"},
+              "url": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "fetch_feed",
+          "description": "Fetch a platform feed timeline.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["platform"],
+            "properties": {
+              "platform": {"type": "string", "enum": ["moltbook", "twitter"]},
+              "limit": {"type": "integer", "minimum": 1, "maximum": 100, "default": 20}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["posts"],
+            "properties": {
+              "posts": {"type": "array"}
+            }
+          }
+        }
       ],
       "documentation_url": "specs/001-observable-mcp-swarm/spec.md"
     },
     "chimera-dev-tools": {
-      "description": "Safe filesystem and git operations for self-evolution (Sandboxed).",
+      "description": "Sandboxed developer tools (file read, git status, test run).",
       "transport": "stdio",
-      "command": "python",
-      "args": ["src/chimera/mcp_servers/devtools.py"],
-      "env": {},
-      "capabilities": [
-        "read_file(path)",
-        "git_status()",
-        "run_test(test_path)"
+      "stdio": {
+        "command": "python",
+        "args": ["src/chimera/mcp_servers/devtools.py"],
+        "cwd": "."
+      },
+      "auth": {
+        "type": "none",
+        "required": [],
+        "optional": [],
+        "notes": "This server must remain sandboxed; it is intended for controlled self-evolution and CI automation."
+      },
+      "tools": [
+        {
+          "name": "read_file",
+          "description": "Read a UTF-8 text file from the workspace.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["content"],
+            "properties": {
+              "content": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "git_status",
+          "description": "Return git status in porcelain format.",
+          "input_schema": {"type": "object", "additionalProperties": false, "properties": {}},
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["stdout"],
+            "properties": {
+              "stdout": {"type": "string"}
+            }
+          }
+        },
+        {
+          "name": "run_test",
+          "description": "Run a specific pytest module or node id.",
+          "input_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["test_path"],
+            "properties": {
+              "test_path": {"type": "string", "minLength": 1}
+            }
+          },
+          "output_schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["exit_code", "stdout", "stderr"],
+            "properties": {
+              "exit_code": {"type": "integer"},
+              "stdout": {"type": "string"},
+              "stderr": {"type": "string"}
+            }
+          }
+        }
       ],
-      "documentation_url": "specs/technical.md"
+      "documentation_url": "specs/mcp_configuration.md"
     }
   }
 }
