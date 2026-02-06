@@ -5,6 +5,12 @@
 **Status**: Draft  
 **Input**: User description: "Write tests for a CommerceManager class, ensuring it correctly initializes with environment variables for the Coinbase AgentKit. Create a specific test for the CFO Judge logic that strictly enforces a daily_spend limit, rejecting any transaction that exceeds it. Mock the blockchain provider to verify transfer_asset and get_balance calls without spending real funds. Implement the wallet integration and budget decorators to pass these safety checks. This phase guarantees financial autonomy with rigid safety guardrails."
 
+## Technical Specifications *(mandatory)*
+
+### API & Schemas
+*   **OpenAPI Contract**: [contracts/openapi.yaml](./contracts/openapi.yaml) - Defines the CommerceManager API surface.
+*   **Data Model**: [data-model.mermaid](./data-model.mermaid) - Entity Relationship Diagram for commerce entities.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Financial Autonomy with Safety (Priority: P1)
@@ -93,18 +99,3 @@ As a developer, I want to use decorators to wrap commerce-related functions so t
 - Daily spend limits are denominated in USD (or equivalent stablecoin value).
 - The "day" for limit calculations is defined as a UTC calendar day.
 - Network/gas fees are small enough to be either ignored or handled separately from the main asset transfer amount.
-- **[Entity 2]**: [What it represents, relationships to other entities]
-
-## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]

@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Chimera Review Service API
+  version: 0.1.0
+  description: |
+    HTTP API for the Human-in-the-Loop (HITL) Review Service.
+    This contract exposes ReviewCards for operator approval or rejection
+    and is aligned with the Production Stability & Safety spec.
+
+servers:
+  - url: http://localhost:8002
+
+paths:
+  /tenants/{tenant_id}/reviews:
+    get:
+      summary: List pending review cards
+      operationId: listPendingReviews
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+      responses:
+        '200':
+          description: List of pending ReviewCards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewCard'
+
+  /tenants/{tenant_id}/reviews/{review_id}/decision:
+    post:
+      summary: Submit a review decision
+      operationId: submitReviewDecision
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecisionRequest'
+      responses:
+        '200':
+          description: Updated ReviewCard after decision
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewCard'
+
+components:
+  parameters:
+    TenantId:
+      name: tenant_id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^t_[a-z0-9][a-z0-9_-]{1,62}$'
+
+  schemas:
+    ReviewCard:
+      type: object
+      additionalProperties: false
+      required:
+        - review_id
+        - task_id
+        - result_id
+        - reason
+        - details
+        - status
+        - timestamp
+      properties:
+        review_id:
+          type: string
+          format: uuid
+        task_id:
+          type: string
+        result_id:
+          type: string
+        reason:
+          type: string
+          enum: [LOW_CONFIDENCE, SENSITIVE_KEYWORD]
+        details:
+          type: string
+        status:
+          type: string
+          enum: [PENDING, APPROVED, REJECTED]
+        operator_id:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        resolution_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ReviewDecisionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - operator_id
+      properties:
+        status:
+          type: string
+          enum: [APPROVED, REJECTED]
+        operator_id:
+          type: string
+          description: ID of the human operator submitting the decision.

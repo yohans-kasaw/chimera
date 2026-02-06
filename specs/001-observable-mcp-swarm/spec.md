@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "Project Chimera is an observable, MCP-integrated swarm of autonomous agents. By leveraging a modular Skills framework, the system enforces strict contracts and Judge-led security gates, enabling a single operator to manage a multi-tenant, fault-tolerant influencer network with guaranteed state integrity."
 
+## Technical Specifications *(mandatory)*
+
+### Protocols & Data Models
+*   **OpenClaw Protocol**: [contracts/openclaw.yaml](./contracts/openclaw.yaml) - Defines the message structure for Swarm/Agent communication.
+*   **Data Model**: [data-model.mermaid](./data-model.mermaid) - Entity Relationship Diagram for Swarm, Tenants, and Tasks.
+*   **OpenAPI Contract**: [contracts/openapi.yaml](./contracts/openapi.yaml) - API definitions for Swarm management.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Operate a Tenant Swarm (Priority: P1)
