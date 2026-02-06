@@ -20,8 +20,8 @@ description: "Task list for feature implementation"
 ## Phase 1: Setup (Shared Infrastructure)
 
 - [x] T001 Add Redis test dependency via `pyproject.toml` + `uv.lock` (e.g., `fakeredis` or equivalent)
-- [ ] T002 [P] Create package skeleton under `src/chimera/models/`, `src/chimera/ports/`, `src/chimera/services/`, `src/chimera/lib/` (add `__init__.py` files)
-- [ ] T003 [P] Create test skeleton under `tests/chimera/unit/` and `tests/chimera/integration/` (add `__init__.py` files)
+- [x] T002 [P] Create package skeleton under `src/chimera/models/`, `src/chimera/ports/`, `src/chimera/services/`, `src/chimera/lib/` (add `__init__.py` files)
+- [x] T003 [P] Create test skeleton under `tests/chimera/unit/` and `tests/chimera/integration/` (add `__init__.py` files)
 
 ---
 
