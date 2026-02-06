@@ -11,58 +11,43 @@
 *   **OpenAPI Contract**: [contracts/openapi.yaml](./contracts/openapi.yaml) - Defines the CommerceManager API surface.
 *   **Data Model**: [data-model.mermaid](./data-model.mermaid) - Entity Relationship Diagram for commerce entities.
 
-## User Scenarios & Testing *(mandatory)*
+## Acceptance Criteria (Gherkin)
 
-### User Story 1 - Financial Autonomy with Safety (Priority: P1)
+### AC-001: Financial Autonomy (Happy Path)
+*   **Trace**: [FR-001], [FR-002], [API-POST-/transfer]
+*   **Scenario**: Successful Asset Transfer
+    *   **Given** the CommerceManager is initialized with valid AgentKit credentials
+    *   **And** the wallet balance is > $50 USD
+    *   **And** the daily spend is $0 / $100
+    *   **When** I request a transfer of $50 USD via `POST /transfer`
+    *   **Then** the response status code is 200 (OK)
+    *   **And** the response body contains a valid `tx_hash`
+    *   **And** the daily spend is updated to $50
 
-As an autonomous agent, I want to execute asset transfers securely within a defined budget so that I can perform commercial tasks without manual intervention while preventing accidental overspending.
+### AC-002: Safety Guardrails (Failure Mode)
+*   **Trace**: [FR-005], [FR-006]
+*   **Scenario**: Reject Transaction Exceeding Daily Limit
+    *   **Given** a wallet with a daily limit of $100
+    *   **And** the current daily spend is $90
+    *   **When** I request a transfer of $11 via `POST /transfer`
+    *   **Then** the response status code is 402 (Payment Required)
+    *   **And** the response body error is "Daily spend limit exceeded"
+    *   **And** the transaction state is recorded as "REJECTED" in the ledger
 
-**Why this priority**: Core objective of the "Agency" phase. Financial autonomy is useless without strict governance.
+### AC-003: Secure Initialization (Edge Case)
+*   **Trace**: [FR-001]
+*   **Scenario**: Missing Credentials
+    *   **Given** the environment variable `CDP_API_KEY_NAME` is unset
+    *   **When** the `CommerceManager` attempts to initialize
+    *   **Then** a `ConfigurationError` is raised
+    *   **And** the system logs a critical error "Missing Wallet Credentials" (masked)
 
-**Independent Test**: Can be tested by attempting a transfer within budget and verifying success, then attempting a transfer exceeding budget and verifying rejection.
-
-**Acceptance Scenarios**:
-
-1. **Given** a correctly configured wallet and a daily limit of $100, **When** I request a $50 transfer, **Then** the transaction is signed and executed, and my daily spend is updated.
-2. **Given** a daily spend of $90 out of a $100 limit, **When** I request an $11 transfer, **Then** the CFO Judge rejects the transaction and provides a budget violation error.
-
----
-
-### User Story 2 - Secure Wallet Initialization (Priority: P1)
-
-As a system administrator, I want the `CommerceManager` to initialize using encrypted environment variables so that sensitive wallet credentials are not hardcoded.
-
-**Why this priority**: Basic security requirement for any financial feature.
-
-**Independent Test**: Attempt to initialize the manager with and without required environment variables and verify correct behavior.
-
-**Acceptance Scenarios**:
-
-1. **Given** all required AgentKit environment variables are set, **When** the system starts, **Then** the `CommerceManager` initializes successfully.
-2. **Given** missing wallet credentials, **When** the system starts, **Then** initialization fails with a clear configuration error.
-
----
-
-### User Story 3 - Budget-Aware Tool Execution (Priority: P2)
-
-As a developer, I want to use decorators to wrap commerce-related functions so that budget checks are automatically enforced before any financial operation is called.
-
-**Why this priority**: Improves developer experience and reduces the risk of forgetting to implement safety checks manually.
-
-**Independent Test**: Wrap a mock transfer method with the budget decorator and verify it blocks execution when the budget is exceeded.
-
-**Acceptance Scenarios**:
-
-1. **Given** a method decorated with `@budget_check`, **When** the method is called and the budget is sufficient, **Then** the underlying method is executed normally.
-2. **Given** a method decorated with `@budget_check`, **When** the method is called and the budget is insufficient, **Then** the underlying method is NOT called and an exception is raised.
-
----
-
-### Edge Cases
-
-- **Currency Price Volatility**: What happens if the USD value of an asset changes between the check and the execution? (Assumption: Limit is checked at the moment of request).
-- **Network Fees**: Network fees (gas) are included in the daily spend limit calculation to ensure strict budget governance and prevent wallet depletion.
-- **Concurrent Transactions**: How does the system handle two near-simultaneous transactions that individually fit within the budget but collectively exceed it?
+### AC-004: Performance Latency
+*   **Trace**: [FR-005]
+*   **Scenario**: Budget Check Overhead
+    *   **Given** a valid transfer request
+    *   **When** the `@budget_check` decorator executes
+    *   **Then** the latency added to the call is < 200ms
 
 ## Requirements *(mandatory)*
 
@@ -85,15 +70,8 @@ As a developer, I want to use decorators to wrap commerce-related functions so t
 - **Spend Tracker**: Keeps track of the total amount spent within the current budget period.
 - **CFO Judge**: The logic engine that decides if a transaction complies with the Budget Policy.
 
-## Success Criteria *(mandatory)*
-
-- **Autonomous Spending**: 100% of valid transactions within budget are successfully executed without manual approval.
-- **Rigid Guardrails**: 0% of transactions exceeding the daily spend limit are executed.
-- **Validation Speed**: Budget checks add less than 200ms of latency to the transaction request flow.
-- **Security**: Wallet credentials are never logged or stored in plain text.
-- **Testability**: 100% of financial logic is verifiable using mocks in the CI/CD pipeline.
-
 ## Assumptions
+
 
 - Coinbase AgentKit is the primary integration point for blockchain interactions.
 - Daily spend limits are denominated in USD (or equivalent stablecoin value).

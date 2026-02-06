@@ -84,7 +84,17 @@ If an Agent encounters ambiguity (e.g., missing type definition, vague business 
     *   Unit Tests (Pytest) for logic.
     *   Integration Tests (Testcontainers) for DB interactions.
 
-### 3.4. Traceability & Observability
+### 3.4. Acceptance Criteria Standards (Rubric: Pro)
+All new Features MUST include an **Acceptance Criteria (Gherkin)** section that:
+1.  **Format**: Uses strict Gherkin syntax (`Given/When/Then`).
+2.  **Traceability**: Explicitly links to Functional Requirements (`[Ref: FR-XXX]`) and API Endpoints (`[Ref: API-POST-/path]`).
+3.  **Coverage**: Includes at least one Scenario for:
+    *   **Happy Path**: Standard success.
+    *   **Edge Case**: Boundary conditions/Race conditions.
+    *   **Failure Mode**: Error handling/Security rejection.
+4.  **Specificity**: Defines exact HTTP status codes, error messages, and performance thresholds (e.g., "< 200ms").
+
+### 3.5. Traceability & Observability
 *   **Logging**: Use `src.chimera.lib.logging`. Do NOT use `print()`.
 *   **Structure**: `logger.info("event_name", extra={"context": "value"})`.
 *   **Reasoning**: Every significant logic branch must emit a log.

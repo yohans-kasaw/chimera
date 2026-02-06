@@ -188,6 +188,35 @@ Persistent navigation and status bar.
 | **CommerceLedger** | `amount`, `currency` | `TransactionSchema` from `GET /commerce/ledger` |
 | **Settings** | `connect` | `POST /integrations/moltbook/connect` |
 
+## Acceptance Criteria (Gherkin)
+
+### AC-001: Dashboard Load (Happy Path)
+*   **Trace**: [UX-001], [API-GET-/swarm/agents]
+*   **Scenario**: Load Swarm Status
+    *   **Given** 12 agents are active in the backend
+    *   **When** I visit `/` (Dashboard)
+    *   **Then** the "Active Agents" metric card shows "12"
+    *   **And** the `AgentTable` renders 12 rows
+    *   **And** the initial data load completes in < 1000ms
+
+### AC-002: Human Intervention (Happy Path)
+*   **Trace**: [UX-002], [API-POST-/pause]
+*   **Scenario**: Pause Agent
+    *   **Given** Agent `ag_001` is "Working"
+    *   **When** I click the "[Pause]" button on `/agents/ag_001`
+    *   **Then** the UI status updates to "Pausing..." immediately (Optimistic)
+    *   **And** a `POST /swarm/agents/ag_001/pause` request is sent
+    *   **And** upon success, the status becomes "Paused (Human Intervention)"
+
+### AC-003: Integration Error Handling (Failure Mode)
+*   **Trace**: [UX-003]
+*   **Scenario**: Connect MoltBook Failure
+    *   **Given** I am on the `/settings` page
+    *   **When** I submit invalid credentials for MoltBook
+    *   **Then** the backend returns 401 (Unauthorized)
+    *   **And** a toast notification appears: "Connection Failed: Invalid API Key"
+    *   **And** the MoltBook status remains "(x) Disconnected"
+
 ## Security & Compliance *(mandatory)*
 This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
 

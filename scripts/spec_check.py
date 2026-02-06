@@ -136,11 +136,43 @@ def ensure_security_specs() -> None:
         raise SystemExit(1)
 
 
+def ensure_acceptance_criteria() -> None:
+    """Ensure all feature specs contain mandatory Acceptance Criteria (Gherkin).
+
+    Per the "Acceptance Criteria Pro" rubric, every spec must include:
+    1. A section named "Acceptance Criteria (Gherkin)"
+    2. At least one "Given/When/Then" block
+    3. Traceability tags (Ref/Trace)
+    """
+    spec_root = REPO_ROOT / "specs"
+    feature_specs = sorted(spec_root.glob("00*-*/spec.md"))
+
+    failed_specs = []
+
+    for spec_path in feature_specs:
+        content = spec_path.read_text(encoding="utf-8")
+
+        has_header = "## Acceptance Criteria (Gherkin)" in content
+        has_gherkin = "Given" in content and "When" in content and "Then" in content
+        has_trace = "Trace" in content or "Ref" in content
+
+        if not (has_header and has_gherkin and has_trace):
+            failed_specs.append(str(spec_path))
+
+    if failed_specs:
+        print("[spec-check] Acceptance Criteria Verification FAILED.")
+        print("The following specs fail the 'Acceptance Criteria Pro' rubric requirements:")
+        for path in failed_specs:
+            print(f"  - {path} (Missing 'Acceptance Criteria (Gherkin)' header or Gherkin syntax)")
+        raise SystemExit(1)
+
+
 def main() -> None:
     ensure_required_files()
     ensure_contracts_are_tracked()
     ensure_specs_are_covered_by_tests()
     ensure_security_specs()
+    ensure_acceptance_criteria()
     print("[spec-check] All required spec, contract, and test mappings are present.")
 
 

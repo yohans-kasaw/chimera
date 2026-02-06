@@ -12,55 +12,40 @@
 - Q: What type of data-fetching tool should be used for the perception test case? → A: Generic "Fetch" Mock
 - Q: How should the client maintain its connection lifecycle? → A: Context Manager (async with)
 
-## User Scenarios & Testing *(mandatory)*
+## Acceptance Criteria (Gherkin)
 
-### User Story 1 - Reliable Tool Interactions (Priority: P1)
+### AC-001: Tool Discovery (Happy Path)
+*   **Trace**: [FR-003], [FR-008]
+*   **Scenario**: Retrieve Capabilities
+    *   **Given** a running MCP 1.0 compliant server
+    *   **When** the MCPClient connects via stdio
+    *   **Then** the handshake completes successfully
+    *   **And** `list_tools()` returns at least 1 validated `ToolDefinition`
 
-As an agent developer, I want my agents to connect to external MCP servers via stdio so they can discover and use tools reliably.
+### AC-002: Tool Execution (Happy Path)
+*   **Trace**: [FR-004]
+*   **Scenario**: Execute Fetch Tool
+    *   **Given** a server providing tool `fetch_data`
+    *   **When** I call `execute_tool("fetch_data", {"query": "test"})`
+    *   **Then** the result is a `ToolResult` object
+    *   **And** `result.is_error` is False
+    *   **And** `result.content` matches the mock server response
 
-**Why this priority**: Core infrastructure for any external capability. Without connection and discovery, no tools can be used.
+### AC-003: Error Handling (Failure Mode)
+*   **Trace**: [FR-005]
+*   **Scenario**: Execute Unknown Tool
+    *   **Given** a connected client
+    *   **When** I call `execute_tool("missing_tool", {})`
+    *   **Then** a `ToolNotFoundError` is raised
+    *   **And** the error message contains "missing_tool"
 
-**Independent Test**: Can be fully tested by running a standalone client against a mock stdio server and verifying tool list retrieval.
-
-**Acceptance Scenarios**:
-
-1. **Given** a mock MCP server binary, **When** the MCPClient initiates a connection via stdio, **Then** the client should successfully handshake and receive server capabilities.
-2. **Given** an established connection, **When** the client requests the tool list, **Then** it should return a list of validated tool definitions matching the server's manifest.
-
----
-
-### User Story 2 - Automated Tool Execution (Priority: P2)
-
-As an autonomous worker, I want to execute a tool on a remote MCP server so I can fetch external data needed for my task.
-
-**Why this priority**: Enables agents to take action and retrieve specific data points, moving beyond static knowledge.
-
-**Independent Test**: Can be tested by invoking a specific tool (e.g., 'echo' or 'fetch') on a mock server and validating the result payload.
-
-**Acceptance Scenarios**:
-
-1. **Given** a mock server with a 'fetch_data' tool, **When** the client executes the tool with valid parameters, **Then** it should return the correct JSON-RPC response containing the data.
-2. **Given** a tool execution request, **When** the server returns a JSON-RPC error (e.g., invalid params), **Then** the client should catch and structure the error for consumer handling.
-
----
-
-### User Story 3 - Perception Pipeline Integration (Priority: P3)
-
-As a Chimera Worker, I want to use the MCPClient to augment my perception of the world so I can use tools like search or social media APIs.
-
-**Why this priority**: Ties the low-level client into the high-level agent workflow, validating the "perception" aspect of the swarm.
-
-**Independent Test**: A worker integration test that triggers a generic "fetch_data" tool execution and verifies the returned JSON-RPC payload flows into the worker's perception context.
-
-**Acceptance Scenarios**:
-
-1. **Given** a Worker assigned a data-fetching task, **When** the Worker uses the MCPClient to execute a mock `fetch_data` tool, **Then** the perception pipeline should capture the result and update the worker's visible state with the fetched data.
-
-### Edge Cases
-
-- **Process Crash**: How does the client handle the stdio process or mock server unexpectedly terminating?
-- **Protocol Mismatch**: What happens if the server sends a malformed JSON-RPC message or uses an unsupported MCP version?
-- **Stalled Connection**: How does the client handle a server that accepts the connection but never responds to the handshake?
+### AC-004: Connection Lifecycle (Edge Case)
+*   **Trace**: [FR-009]
+*   **Scenario**: Server Crash
+    *   **Given** an active MCP connection
+    *   **When** the server process terminates unexpectedly
+    *   **Then** the next client call raises `ConnectionError`
+    *   **And** the context manager cleans up resources (pipes closed)
 
 ## Requirements *(mandatory)*
 
@@ -84,11 +69,7 @@ As a Chimera Worker, I want to use the MCPClient to augment my perception of the
 - **ToolResult**: Data structure containing the outcome of a tool execution (success or failure).
 
 ## Success Criteria
-
-1.  **Tool Discovery Speed**: Retrieve tool definitions from a local mock MCP server in under 100ms.
-2.  **Execution Reliability**: Maintain 100% success rate for 'no-op' tool executions over 100 iterations.
-3.  **Data Integrity**: 100% of tool results MUST pass Pydantic validation before being consumed by the Worker.
-4.  **Error Mapping**: 100% of standard JSON-RPC error codes are mapped to internal exception classes.
+*(Superseded by Acceptance Criteria above)*
 
 ## Assumptions
 

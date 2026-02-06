@@ -67,11 +67,39 @@ Agent Intent
 - Workflow pipeline: [src/chimera/pipelines/skills_workflow.py](../../src/chimera/pipelines/skills_workflow.py)
 - MCP sample configuration: [mcp.sample.json](../../mcp.sample.json)
 
-## Acceptance Criteria
-- Skill definitions must use Pydantic models for input/output.
-- Skill registry supports registration and discovery by name.
-- Workflow runner executes ordered steps and returns structured run records.
-- MCP tool skill must enforce that a configured MCP client is required.
+## Acceptance Criteria (Gherkin)
+
+### AC-001: Skill Registration (Happy Path)
+*   **Trace**: [Data Contract]
+*   **Scenario**: Valid Skill Registration
+    *   **Given** a Python class inheriting from `BaseSkill`
+    *   **And** it defines valid Pydantic input/output models
+    *   **When** I call `registry.register(MySkill)`
+    *   **Then** the skill is retrievable by name "MySkill"
+
+### AC-002: Workflow Execution (Happy Path)
+*   **Trace**: [Workflow Step]
+*   **Scenario**: Multi-step Execution
+    *   **Given** a workflow with steps `[echo, normalize]`
+    *   **When** the workflow runner executes
+    *   **Then** step 1 output is passed to step 2
+    *   **And** the final result matches the normalized string
+    *   **And** a run record is created with `status="succeeded"`
+
+### AC-003: Validation Failure (Failure Mode)
+*   **Trace**: [Skill Definition]
+*   **Scenario**: Invalid Input Data
+    *   **Given** a skill requiring `email: EmailStr`
+    *   **When** I invoke it with `email="not-an-email"`
+    *   **Then** a `PydanticValidationError` is raised
+    *   **And** the workflow halts immediately
+
+### AC-004: MCP Tool Integration (Edge Case)
+*   **Trace**: [MCP Tool Skill]
+*   **Scenario**: Missing Client
+    *   **Given** an `MCPSkill` configured for tool "weather"
+    *   **When** I execute it without an active `MCPClient`
+    *   **Then** a `RuntimeError` is raised "MCP Client not configured"
 
 ## Security & Compliance *(mandatory)*
 This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).

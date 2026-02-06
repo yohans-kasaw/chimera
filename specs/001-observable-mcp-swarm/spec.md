@@ -12,62 +12,43 @@
 *   **Data Model**: [data-model.mermaid](./data-model.mermaid) - Entity Relationship Diagram for Swarm, Tenants, and Tasks.
 *   **OpenAPI Contract**: [contracts/openapi.yaml](./contracts/openapi.yaml) - API definitions for Swarm management.
 
-## User Scenarios & Testing *(mandatory)*
+## Acceptance Criteria (Gherkin)
 
-### User Story 1 - Operate a Tenant Swarm (Priority: P1)
+### AC-001: Operate Tenant Swarm (Happy Path)
+*   **Trace**: [FR-002], [FR-003], [API-POST-/swarm/session]
+*   **Scenario**: Operator Starts Session
+    *   **Given** a valid tenant "Tenant-A" exists
+    *   **When** the operator submits `POST /swarm/session` with tenant_id="Tenant-A"
+    *   **Then** the response status is 201 (Created)
+    *   **And** the session state is "ACTIVE"
+    *   **And** the Swarm Dashboard displays the new session within 500ms
 
-As a single operator, I can create and operate an autonomous agent swarm for a specific tenant so that I can execute influencer-network tasks with continuous visibility into what the system is doing and why.
+### AC-002: Security Gate Enforcement (Failure Mode)
+*   **Trace**: [FR-007], [FR-008]
+*   **Scenario**: Judge Rejects Policy Violation
+    *   **Given** an active agent proposes action `tweet("hacked")`
+    *   **And** the active security policy forbids the keyword "hacked"
+    *   **When** the Judge evaluates the proposal
+    *   **Then** the action is rejected with reason "Policy Violation: Forbidden Keyword"
+    *   **And** an Audit Event is created with `decision="DENY"`
+    *   **And** no side effects (tweets) occur
 
-**Why this priority**: This is the core value proposition: a single operator can run a swarm to complete real work while maintaining observability and control.
+### AC-003: Cross-Tenant Isolation (Edge Case)
+*   **Trace**: [FR-001], [FR-009]
+*   **Scenario**: Prevent Cross-Tenant Access
+    *   **Given** Agent-A belongs to Tenant-A
+    *   **When** Agent-A attempts to read data belonging to Tenant-B
+    *   **Then** the database layer raises a `TenantIsolationError`
+    *   **And** the attempt is logged as a security incident
 
-**Independent Test**: Can be fully tested by onboarding one tenant, starting one swarm session, assigning at least one skill-driven task, and observing end-to-end execution status.
-
-**Acceptance Scenarios**:
-
-1. **Given** a new tenant exists, **When** the operator starts a swarm session for that tenant, **Then** the system creates an isolated execution context and displays a real-time view of agent status and assigned work.
-2. **Given** a running swarm session, **When** the operator submits a task that requires one or more skills, **Then** the system routes the task to appropriate agents and provides progress updates and a final outcome summary.
-
----
-
-### User Story 2 - Enforce Judge-Led Security Gates (Priority: P2)
-
-As an operator, I can rely on a Judge-led security gate to evaluate sensitive or risky actions so that unsafe actions are prevented and all decisions are auditable.
-
-**Why this priority**: Autonomy without safety controls is unacceptable for multi-tenant operation and external-facing influencer workflows.
-
-**Independent Test**: Can be fully tested by triggering a policy-violating action attempt and verifying it is blocked, logged, and does not change tenant state.
-
-**Acceptance Scenarios**:
-
-1. **Given** an agent proposes an action that violates an active security policy, **When** the Judge evaluates the proposal, **Then** the action is rejected, the rejection reason is recorded, and no side effects are committed.
-2. **Given** an agent proposes an action that is allowed but sensitive, **When** the Judge evaluates the proposal, **Then** the action is explicitly approved and the approval rationale is recorded.
-
----
-
-### User Story 3 - Recover from Failures Without State Corruption (Priority: P3)
-
-As an operator, I can continue operating a tenant swarm even when individual agents fail so that long-running workflows complete reliably and the system maintains guaranteed state integrity.
-
-**Why this priority**: Fault tolerance and state integrity are necessary to safely scale autonomous operations over time.
-
-**Independent Test**: Can be fully tested by inducing an agent failure during task execution and verifying the system recovers, preserves a consistent state history, and completes or cleanly halts the affected work.
-
-**Acceptance Scenarios**:
-
-1. **Given** a task is in progress, **When** an agent fails mid-execution, **Then** the system surfaces the failure, preserves prior committed state, and resumes the task via another agent or terminates it with a clear reason.
-2. **Given** a swarm session has executed multiple actions, **When** the operator reviews the session history, **Then** the system provides an auditable sequence of decisions and state changes that can be reconciled to the final state.
-
----
-
-### Edge Cases
-
-- A skill invocation is requested with missing or invalid inputs.
-- A skill contract changes in a way that breaks compatibility with existing tasks.
-- An agent attempts to access data or resources belonging to another tenant.
-- Multiple agents propose conflicting actions against the same managed entity.
-- A Judge decision service becomes temporarily unavailable.
-- Partial failures occur during multi-step workflows (some steps succeed, later steps fail).
-- The operator attempts to run multiple concurrent swarm sessions for the same tenant.
+### AC-004: Fault Tolerance
+*   **Trace**: [FR-010]
+*   **Scenario**: Single Agent Failure
+    *   **Given** Agent-X is executing Task-Y
+    *   **When** Agent-X crashes (process termination)
+    *   **Then** the Swarm Supervisor detects the failure within 1000ms
+    *   **And** Task-Y state is reset to "PENDING"
+    *   **And** Agent-X is marked "RESTARTING"
 
 ## Requirements *(mandatory)*
 
@@ -109,18 +90,8 @@ As an operator, I can continue operating a tenant swarm even when individual age
 - **Influencer Profile**: A managed entity representing an influencer account, constraints, and engagement goals.
 - **Campaign**: A set of objectives and tasks executed against one or more influencer profiles.
 
-## Success Criteria *(mandatory)*
-
-### Measurable Outcomes
-
-- **SC-001**: An operator can create a tenant and start a swarm session in under 10 minutes.
-- **SC-002**: In normal operation, at least 95% of submitted tasks reach a terminal outcome (success or policy-blocked) without manual intervention.
-- **SC-003**: 100% of Judge gate decisions are recorded and retrievable for audit within 5 seconds of the decision.
-- **SC-004**: Cross-tenant data or action leakage incidents are 0 in acceptance testing and ongoing monitoring.
-- **SC-005**: After a single-agent failure, affected workflows resume or halt with a clear operator-visible reason within 60 seconds.
-- **SC-006**: For a completed swarm session, the operator can reconcile the final reported state to the full auditable event history with no unexplained state changes.
-
 ## Security & Compliance *(mandatory)*
+
 This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).
 
 *   **Authentication**: Uses standard OAuth2/JWT flow via the CommerceManager.
