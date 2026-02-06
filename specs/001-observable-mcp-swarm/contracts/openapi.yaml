@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: Chimera Swarm Brain API (MVP)
+  version: 0.1.0
+  description: |
+    Minimal operator-facing API contract for creating sessions, submitting tasks,
+    and observing results/audit events. This is a contract-first artifact; the
+    initial implementation may be in-process or CLI-driven.
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /tenants:
+    post:
+      summary: Create tenant
+      operationId: createTenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTenantRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+
+  /tenants/{tenant_id}/sessions:
+    post:
+      summary: Start swarm session
+      operationId: startSession
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartSessionRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwarmSession'
+
+  /tenants/{tenant_id}/tasks:
+    post:
+      summary: Submit task
+      operationId: submitTask
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskAccepted'
+
+  /tenants/{tenant_id}/tasks/{task_id}:
+    get:
+      summary: Get task status
+      operationId: getTask
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /tenants/{tenant_id}/tasks/{task_id}/result:
+    get:
+      summary: Get task result
+      operationId: getResult
+      parameters:
+        - $ref: '#/components/parameters/TenantId'
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+components:
+  parameters:
+    TenantId:
+      name: tenant_id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^t_[a-z0-9][a-z0-9_-]{1,62}$'
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 128
+
+  schemas:
+    CreateTenantRequest:
+      type: object
+      additionalProperties: false
+      required: [tenant_id]
+      properties:
+        tenant_id:
+          type: string
+          pattern: '^t_[a-z0-9][a-z0-9_-]{1,62}$'
+
+    Tenant:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, created_at]
+      properties:
+        tenant_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    StartSessionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        requested_by:
+          type: string
+
+    SwarmSession:
+      type: object
+      additionalProperties: false
+      required: [session_id, tenant_id, state, created_at, updated_at]
+      properties:
+        session_id:
+          type: string
+        tenant_id:
+          type: string
+        state:
+          type: string
+          enum: [created, running, paused, stopped]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Task:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, trace_id, task_id, kind, input, status, timing]
+      properties:
+        tenant_id:
+          type: string
+        trace_id:
+          type: string
+          minLength: 16
+          maxLength: 128
+        task_id:
+          type: string
+          minLength: 16
+          maxLength: 128
+        parent_task_id:
+          type: string
+          minLength: 16
+          maxLength: 128
+        session_id:
+          type: string
+          minLength: 8
+          maxLength: 128
+        kind:
+          type: string
+          minLength: 1
+          maxLength: 128
+        input:
+          type: object
+        status:
+          type: string
+          enum: [queued, running, succeeded, failed, cancelled, blocked, timed_out]
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 50
+        attempt:
+          type: integer
+          minimum: 0
+          default: 0
+        max_attempts:
+          type: integer
+          minimum: 0
+          default: 3
+        timeout_s:
+          type: integer
+          minimum: 1
+          maximum: 86400
+        timing:
+          $ref: '#/components/schemas/Timing'
+
+    TaskAccepted:
+      type: object
+      additionalProperties: false
+      required: [task_id]
+      properties:
+        task_id:
+          type: string
+
+    ErrorInfo:
+      type: object
+      additionalProperties: false
+      required: [code, message, retryable]
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 64
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4096
+        retryable:
+          type: boolean
+          default: false
+        details:
+          type: object
+
+    Timing:
+      type: object
+      additionalProperties: false
+      required: [created_at, updated_at]
+      properties:
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+
+    Result:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, trace_id, task_id, status, output, timing]
+      properties:
+        tenant_id:
+          type: string
+        trace_id:
+          type: string
+          minLength: 16
+          maxLength: 128
+        task_id:
+          type: string
+          minLength: 16
+          maxLength: 128
+        status:
+          type: string
+          enum: [succeeded, failed, cancelled, blocked, timed_out]
+        output:
+          type: object
+        error:
+          $ref: '#/components/schemas/ErrorInfo'
+        produced_by:
+          type: string
+        timing:
+          $ref: '#/components/schemas/Timing'
