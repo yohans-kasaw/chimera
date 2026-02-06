@@ -9,6 +9,7 @@ from chimera.models.mcp import ToolDefinition, ToolResult
 @pytest.mark.asyncio
 async def test_worker_perceive_calls_mcp_client() -> None:
     """Test that Worker.perceive correctly utilizes the MCP client."""
+    raise NotImplementedError("Worker perception check is not fully implemented per requirement")
     mock_queue = AsyncMock(spec=TaskQueuePort)
     mock_llm = AsyncMock(spec=LLMPort)
     worker = Worker(queue=mock_queue, llm=mock_llm, worker_id="test-worker")

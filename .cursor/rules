@@ -1,0 +1,32 @@
+# Project Chimera Context & Rules
+
+## Project Context
+This is **Project Chimera**, an infrastructure for building an **Autonomous Influencer System**. We are building a "Factory" where intent is defined by Specs and reliability is ensured by Infrastructure.
+
+## The Prime Directive
+**NEVER generate code without checking `specs/` first.**
+Ambiguity is the enemy. If a request contradicts the spec or if the spec is missing, ask for clarification.
+
+## Rules of Engagement
+
+1.  **Spec-Driven Development (SDD):**
+    *   The `specs/` directory is the Source of Truth.
+    *   Before writing implementation code, verify against `specs/technical.md`, `specs/functional.md`, and relevant feature specs (e.g., `specs/001-*`).
+    *   Ensure all API contracts and Data Models align with the definitions in `specs/`.
+
+2.  **Traceability & Explanations:**
+    *   **Explain your plan** before writing code.
+    *   Cite the specific spec file you are implementing.
+
+3.  **Code Style & Quality:**
+    *   Follow the project's existing conventions (Python 3.12+, Pydantic v2, Typed).
+    *   **Test-Driven Development (TDD):** Write or verify existing failing tests before implementing logic.
+    *   Run `make lint`, `make typecheck`, and `make test` to verify changes.
+
+4.  **Security:**
+    *   Never commit secrets.
+    *   Be skeptical of external inputs; ensure validation layers (like the `JudgeAgent`) are respected.
+
+5.  **Agentic "Skills" vs. "Tools":**
+    *   **Skills** (in `src/chimera/skills/`) are internal, reusable functions/classes.
+    *   **MCP Tools** are external bridges. Use the `MCPClient` abstraction to interface with them.

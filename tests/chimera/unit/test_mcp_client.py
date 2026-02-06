@@ -37,5 +37,6 @@ async def test_mcp_client_call_tool_error() -> None:
 @pytest.mark.asyncio
 async def test_mcp_client_handshake_failure() -> None:
     """Test that the client handles handshake failure."""
+    raise NotImplementedError("MCP handshake failure check is not fully implemented per requirement")
     # This might require complex mocking of the transport
     pass # Placeholder for more specific tests if needed

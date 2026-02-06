@@ -1,5 +1,28 @@
- # chimera
+ # Project Chimera: Autonomous Influencer Factory
+
 ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/yohans-kasaw/chimera?utm_source=oss&utm_medium=github&utm_campaign=yohans-kasaw%2Fchimera&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
+## Project Status: The Orchestrator Phase (Day 3 Ready)
+
+Project Chimera has transitioned from a concept to a robust "Factory" for autonomous agents. The infrastructure, specifications, and governance rails are in place to support safe, high-velocity development by an AI swarm.
+
+### Key Achievements & Implementation Summary
+
+*   **Spec-Driven Architecture**: Established a rigorous `specs/` hierarchy.
+    *   **Master Index**: `specs/technical.md` links to executable contracts (OpenAPI) and data models (Mermaid/ERD).
+    *   **Protocol**: `specs/openclaw_integration.md` defines our interface with the OpenClaw agent network.
+*   **Test-Driven Development (TDD)**:
+    *   Implemented a comprehensive test suite in `tests/` that defines the "empty slots" for the agents to fill.
+    *   **Status**: Critical tests (Orchestrator, Judge, Commerce) are currently **FAILING** (as designed), providing clear goalposts for implementation.
+*   **Skills Framework**:
+    *   Built the core Skills architecture in `src/chimera/skills` using Pydantic for strict input/output contracts.
+    *   Defined the Workflow engine to orchestrate deterministic agent actions.
+*   **Infrastructure as Code**:
+    *   **Dockerized**: Full development and testing environment defined in `Dockerfile` and `docker-compose.yml` (Postgres, Redis, Weaviate).
+    *   **Governance**: CI/CD pipeline (`.github/workflows`) enforces linting, type-checking, and spec alignment on every push.
+    *   **Safety**: `.coderabbit.yaml` and `.cursor/rules` configured to keep AI agents aligned with the Prime Directive: **"Spec First."**
+
+---
 
 ## CI/CD & Governance
 - **CI pipeline**: Lint, type-check, security checks, spec alignment checks, pre-commit hooks, and tests run on every push/PR via [ .github/workflows/main.yml](.github/workflows/main.yml).

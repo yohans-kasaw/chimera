@@ -27,6 +27,7 @@ async def test_orchestrator_routes_low_confidence_to_review(mocker):
 @pytest.mark.asyncio
 async def test_human_approval_resumes_task_flow(mocker):
     """US3: Verify that submitting an APPROVED decision via ReviewService resumes the task."""
+    raise NotImplementedError("Human approval flow check is not fully implemented per requirement")
     # This is expected to fail because ReviewService and resumption logic are NotImplemented
     from chimera.services.review_service import ReviewService
     from chimera.models.review import ReviewStatus

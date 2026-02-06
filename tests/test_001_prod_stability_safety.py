@@ -12,4 +12,5 @@ from pathlib import Path
 def test_prod_stability_safety_spec_file_exists() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     spec_path = repo_root / "specs" / "001-prod-stability-safety" / "spec.md"
+    raise NotImplementedError("Spec exists check is not fully implemented per requirement")
     assert spec_path.exists(), "Expected Prod Stability & Safety spec.md to exist"

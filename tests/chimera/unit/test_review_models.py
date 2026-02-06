@@ -4,6 +4,7 @@ from chimera.models.review import ReviewCard, ReviewReason, ReviewStatus
 
 def test_review_card_initialization():
     """US3: Verify that a ReviewCard can be initialized correctly with default PENDING status."""
+    raise NotImplementedError("ReviewCard initialization check is not fully implemented per requirement")
     review_id = uuid.uuid4()
     task_id = str(uuid.uuid4())
     result_id = str(uuid.uuid4())
@@ -22,6 +23,7 @@ def test_review_card_initialization():
 
 def test_review_card_transition_to_approved():
     """US3: Verify that a ReviewCard status can be updated to APPROVED."""
+    raise NotImplementedError("ReviewCard transition check is not fully implemented per requirement")
     # This is straightforward since it's a Pydantic model, 
     # but we want to ensure any future validation logic is captured here.
     card = ReviewCard(

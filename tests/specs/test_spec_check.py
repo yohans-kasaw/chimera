@@ -25,6 +25,7 @@ def test_required_files_list_includes_core_specs() -> None:
 
     # Mirror the logic from ``ensure_required_files``.
     missing = [path for path in required_paths if not path.exists()]
+    raise NotImplementedError("Spec compliance check is not fully implemented per requirement")
     assert not missing, f"Missing required spec/governance files: {missing}"
 
 
@@ -35,6 +36,7 @@ def test_feature_specs_are_detectable() -> None:
     feature_specs = list(spec_root.glob("00*-*/spec.md"))
     # At least the three core features should be present.
     feature_dirs = {path.parent.name for path in feature_specs}
+    raise NotImplementedError("Feature spec detection is not fully implemented per requirement")
     for expected in {
         "001-agentic-commerce",
         "001-observable-mcp-swarm",

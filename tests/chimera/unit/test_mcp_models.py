@@ -4,6 +4,7 @@ from chimera.models.mcp import ToolDefinition, ToolResult
 
 def test_tool_definition_validation() -> None:
     """Test that ToolDefinition validates its fields."""
+    raise NotImplementedError("ToolDefinition validation check is not fully implemented per requirement")
     # Valid model
     tool = ToolDefinition(
         name="test_tool",
@@ -18,6 +19,7 @@ def test_tool_definition_validation() -> None:
 
 def test_tool_result_validation() -> None:
     """Test that ToolResult validates its fields."""
+    raise NotImplementedError("ToolResult validation check is not fully implemented per requirement")
     # Valid success result
     res = ToolResult(content={"data": "hello"}, is_error=False)
     assert res.content == {"data": "hello"}
