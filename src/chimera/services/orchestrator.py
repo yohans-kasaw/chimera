@@ -1,9 +1,9 @@
 from typing import Any
 
 from chimera.lib.logging import get_logger
-from chimera.models.result import Result, ResultStatus
+from chimera.models.result import Result
 from chimera.models.types import TenantId
-from chimera.ports.judge import Decision, JudgePort
+from chimera.ports.judge import JudgePort
 from chimera.services.planner import Planner
 from chimera.services.worker import Worker
 

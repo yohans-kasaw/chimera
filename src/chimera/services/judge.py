@@ -1,5 +1,3 @@
-from datetime import UTC, datetime
-
 from chimera.lib.logging import get_logger
 from chimera.models.result import Result
 from chimera.models.types import TenantId

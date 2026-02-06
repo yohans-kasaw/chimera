@@ -1,9 +1,7 @@
-import uuid
-from datetime import UTC, datetime
 from typing import Any
 
 from chimera.lib.logging import get_logger
-from chimera.models.task import Task, TaskStatus
+from chimera.models.task import Task
 from chimera.models.types import TenantId
 from chimera.ports.queue import TaskQueuePort
 
