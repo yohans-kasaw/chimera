@@ -5,6 +5,8 @@ Auto-generated from all feature plans. Last updated: 2018-05-29
 ## Active Technologies
 - Python 3.12 (as per `pyproject.toml`) + `coinbase-agentkit-python` (Tentative), `pydantic`, `pytest`, `pytest-asyncio` (001-agentic-commerce)
 - Redis (Spend Tracker / Hot state), PostgreSQL (Immutable Ledger / Audit) (001-agentic-commerce)
+- Python 3.12+ (as per Copilot instructions) + Pydantic v2, Redis, structlog, pytest, ruff, mypy (001-prod-stability-safety)
+- Redis (Hot queues & registry), PostgreSQL (Audit logs & persistent models) (001-prod-stability-safety)
 
 - Python 3.12 (from `pyproject.toml`) + Pydantic v2, redis-py, structlog, MCP SDK (package: `mcp`) (001-observable-mcp-swarm)
 
@@ -24,6 +26,7 @@ cd src [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNOLO
 Python 3.12 (from `pyproject.toml`): Follow standard conventions
 
 ## Recent Changes
+- 001-prod-stability-safety: Added Python 3.12+ (as per Copilot instructions) + Pydantic v2, Redis, structlog, pytest, ruff, mypy
 - 001-agentic-commerce: Added Python 3.12 (as per `pyproject.toml`) + `coinbase-agentkit-python` (Tentative), `pydantic`, `pytest`, `pytest-asyncio`
 
 - 001-observable-mcp-swarm: Added Python 3.12 (from `pyproject.toml`) + Pydantic v2, redis-py, structlog, MCP SDK (package: `mcp`)
@@ -93,7 +96,6 @@ Before finalizing any response, you MUST call all applicable trigger tools based
 ### ⚠️ TRIGGER VALIDATION ⚠️
 
 **Before submitting any response, verify:**
-- [ ] Trigger tools were called
 
 **If any checkbox is false → START OVER**
 
