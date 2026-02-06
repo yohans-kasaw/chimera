@@ -1,0 +1,68 @@
+{
+  "mcp_version": "1.0.0",
+  "project": "Chimera",
+  "description": "Production MCP Configuration for the Chimera Autonomous Influencer Swarm.",
+  "servers": {
+    "chimera-memory": {
+      "description": "Long-term memory and RAG capabilities backed by Weaviate.",
+      "transport": "stdio",
+      "command": "python",
+      "args": ["src/chimera/mcp_servers/memory.py"],
+      "env": {
+        "WEAVIATE_URL": "WEAVIATE_URL",
+        "WEAVIATE_API_KEY": "WEAVIATE_API_KEY"
+      },
+      "capabilities": [
+        "remember_fact(content, tags)",
+        "recall_context(query, limit)",
+        "search_knowledge_base(query)"
+      ],
+      "documentation_url": "specs/data-architecture.md"
+    },
+    "chimera-commerce": {
+      "description": "Financial autonomy and wallet management backed by Coinbase AgentKit.",
+      "transport": "stdio",
+      "command": "python",
+      "args": ["src/chimera/mcp_servers/commerce.py"],
+      "env": {
+        "CDP_API_KEY_NAME": "CDP_API_KEY_NAME",
+        "CDP_API_KEY_PRIVATE_KEY": "CDP_API_KEY_PRIVATE_KEY"
+      },
+      "capabilities": [
+        "get_wallet_balance(asset_id)",
+        "transfer_asset(amount, asset_id, destination)",
+        "get_transaction_status(tx_hash)"
+      ],
+      "documentation_url": "specs/001-agentic-commerce/spec.md"
+    },
+    "chimera-social": {
+      "description": "Social network integration for MoltBook and Twitter/X.",
+      "transport": "stdio",
+      "command": "python",
+      "args": ["src/chimera/mcp_servers/social.py"],
+      "env": {
+        "MOLTBOOK_API_KEY": "MOLTBOOK_API_KEY",
+        "TWITTER_BEARER_TOKEN": "TWITTER_BEARER_TOKEN"
+      },
+      "capabilities": [
+        "post_content(platform, text, media_urls)",
+        "reply_to_post(platform, post_id, text)",
+        "fetch_feed(platform, limit)"
+      ],
+      "documentation_url": "specs/001-observable-mcp-swarm/spec.md"
+    },
+    "chimera-dev-tools": {
+      "description": "Safe filesystem and git operations for self-evolution (Sandboxed).",
+      "transport": "stdio",
+      "command": "python",
+      "args": ["src/chimera/mcp_servers/devtools.py"],
+      "env": {},
+      "capabilities": [
+        "read_file(path)",
+        "git_status()",
+        "run_test(test_path)"
+      ],
+      "documentation_url": "specs/technical.md"
+    }
+  }
+}

@@ -143,9 +143,11 @@ Used for agent long-term memory and context retrieval.
 
 ### 3.2. Migration Strategy (Schema Evolution)
 *   **PostgreSQL**: Managed via **Alembic**.
+    *   **Configuration**: [`alembic.ini`](../../alembic.ini) and [`scripts/db/migrations/env.py`](../../scripts/db/migrations/env.py).
+    *   **Schema Definition**: The source of truth for the schema is the SQLModel code in [`src/chimera/db/schema.py`](../../src/chimera/db/schema.py).
     *   All migrations must be reversible (Up/Down).
     *   CI/CD pipeline blocks PRs if model definitions differ from migration scripts.
-*   **Weaviate**: Managed via custom schema migration scripts in `scripts/db/weaviate_migrator.py`.
+*   **Weaviate**: Managed via custom schema migration scripts in [`scripts/db/weaviate_migrator.py`](../../scripts/db/weaviate_migrator.py).
     *   Checks for class existence and property consistency on startup.
 
 ### 3.3. High-Velocity Metadata Handling
