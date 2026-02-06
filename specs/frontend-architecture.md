@@ -78,3 +78,11 @@ Detailed specifications for frontend modules:
 | ID | Module | Status | Description |
 | :--- | :--- | :--- | :--- |
 | **003** | **[Frontend Dashboard](./003-frontend-dashboard/spec.md)** | **Draft** | Main console for Swarm and Commerce management. |
+
+---
+
+## 6. Governance & Compliance
+All architectural decisions and code modifications are subject to the **Agent Governance Rules** defined in [`specs/_meta.md`](./_meta.md).
+*   **Spec-First**: No architectural deviation without spec updates.
+*   **Strict Typing**: All frontend code must pass TypeScript strict mode.
+*   **Traceability**: All user actions must be logged via the `TelemeteryService`.

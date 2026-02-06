@@ -109,3 +109,11 @@ All backend services must expose OpenAPI 3.1 compliant schemas.
 *   **Docs**: All public modules must have docstrings.
 *   **Coverage**: Minimum 80% line coverage.
 *   **Safety**: No secrets in code (enforced by `bandit` and `pre-commit`).
+
+---
+
+## 6. Governance & Compliance
+All architectural decisions and code modifications are subject to the **Agent Governance Rules** defined in [`specs/_meta.md`](./_meta.md).
+*   **Spec-First**: No architectural deviation without spec updates.
+*   **Strict Typing**: All backend code must pass `mypy strict`.
+*   **Traceability**: All architectural components must emit structured logs.
