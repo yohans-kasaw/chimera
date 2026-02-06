@@ -3,6 +3,8 @@
 ## Project Context
 This is **Project Chimera**, an infrastructure for building an **Autonomous Influencer System**. We are building a "Factory" where intent is defined by Specs and reliability is ensured by Infrastructure.
 
+This file is the Cursor-compatible rules entrypoint. The full, authoritative agent manual lives in: `AGENT.md`.
+
 ## The Prime Directive
 **NEVER generate code without checking `specs/` first.**
 Ambiguity is the enemy. If a request contradicts the spec or if the spec is missing, ask for clarification.
@@ -17,6 +19,7 @@ Ambiguity is the enemy. If a request contradicts the spec or if the spec is miss
 2.  **Traceability & Explanations:**
     *   **Explain your plan** before writing code.
     *   Cite the specific spec file you are implementing.
+    *   Prefer a structured STATE block (see `AGENT.md`).
 
 3.  **Code Style & Quality:**
     *   Follow the project's existing conventions (Python 3.12+, Pydantic v2, Typed).
@@ -39,3 +42,10 @@ Ambiguity is the enemy. If a request contradicts the spec or if the spec is miss
 5.  **Agentic "Skills" vs. "Tools":**
     *   **Skills** (in `src/chimera/skills/`) are internal, reusable functions/classes.
     *   **MCP Tools** are external bridges. Use the `MCPClient` abstraction to interface with them.
+
+## Quick Links
+
+- Agent manual: `AGENT.md`
+- Specs index: `specs/technical.md`
+- MCP config: `mcp.json` and `specs/mcp_configuration.md`
+- Skills catalog: `skills.json` and `specs/skills_catalog.md`
