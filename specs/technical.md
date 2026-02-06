@@ -29,4 +29,5 @@ The CI/CD pipeline enforces spec fidelity, code quality, and security checks.
 *   **CI workflow**: Lint, type-check, security checks, and tests run on every push/PR via [ .github/workflows/main.yml](../.github/workflows/main.yml)
 *   **Coverage workflow**: Produces `coverage.xml` artifacts via [ .github/workflows/coverage.yml](../.github/workflows/coverage.yml)
 *   **Docker parity**: Tests are executed in Docker to ensure environment consistency (see [Dockerfile](../Dockerfile))
+*   **Local infra**: Development dependencies run via Docker Compose (see [docker-compose.yml](../docker-compose.yml))
 *   **AI review policy**: Automated review guidance for spec alignment and security is defined in [ .coderabbit.yaml](../.coderabbit.yaml)

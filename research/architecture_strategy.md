@@ -99,6 +99,15 @@ We select **SQL (PostgreSQL)** as the primary store for high-velocity video meta
 | **Semantic Knowledge** | **Weaviate** | Long-term memory, Persona definitions that need semantic search. |
 | **Video Assets** | **S3 / Blob Storage** | The actual video files (referenced by URL in Postgres). |
 
+## 4.1 Local Infrastructure (Docker Compose)
+To ensure reproducible development and CI parity, core dependencies are containerized with Docker Compose. This includes:
+
+*   **Redis** for task queues and short-term state.
+*   **PostgreSQL** for transactional metadata and audit logs.
+*   **Weaviate** for vector memory and semantic retrieval.
+
+The Compose definition lives at [docker-compose.yml](../docker-compose.yml) and is intended for local orchestration of the core data plane.
+
 ## 5. Project Decomposition: Autonomous Workstreams
 
 To execute this architecture efficiently, we decompose the system into 5 independent workstreams suitable for parallel development by autonomous teams.

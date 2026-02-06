@@ -17,3 +17,8 @@
 ## Docker
 - `docker build -t chimera-ci .`
 - `docker run --rm chimera-ci`
+
+## Docker Compose (Local Infra)
+- `make compose-up` — start Redis, Postgres, and Weaviate
+- `make compose-down` — stop and remove volumes
+- Compose definition: [docker-compose.yml](docker-compose.yml)
