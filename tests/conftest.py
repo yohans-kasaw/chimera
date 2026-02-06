@@ -1,6 +1,9 @@
-import pytest
 import asyncio
-from typing import Generator, Any
+from collections.abc import Generator
+from typing import Any
+
+import pytest
+
 
 @pytest.fixture(scope="session")
 def event_loop() -> Generator[asyncio.AbstractEventLoop, Any, None]:
