@@ -36,3 +36,14 @@ As a planner, I want to chain skills into repeatable workflows so that multi-ste
 
 #### MCP Tool Binding (P2)
 As an operator, I want skills to invoke MCP tools through a standard client so that external integrations remain decoupled from core logic.
+
+### Chimera Command Console (Frontend)
+
+#### Visualize Swarm State (P1)
+As an operator, I want to see a live dashboard of all active agents and their current tasks so that I can immediately identify bottlenecks or stalled agents.
+
+#### Intervene in Agent Loops (P1)
+As an operator, I want to pause or stop a specific agent's execution loop from the UI so that I can prevent runaway behavior or correct a mistake.
+
+#### Audit Commerce Flows (P2)
+As a financial controller, I want to view a ledger of all agent transactions so that I can reconcile spending against the budget.

@@ -17,6 +17,7 @@ The Master Data Specification defines the unified architecture across PostgreSQL
 
 *   **Master Data Spec**: [data-architecture.md](./data-architecture.md)
 *   **Backend Architecture & Agent Framework**: [backend-architecture.md](./backend-architecture.md)
+*   **Frontend Architecture & Design System**: [frontend-architecture.md](./frontend-architecture.md)
 
 ### Domain-Specific Models (Reference)
 The following diagrams provide focused views on specific domains, but are subordinate to the Master Data Spec.
