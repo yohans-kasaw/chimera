@@ -31,3 +31,14 @@ class Worker:
             A sequence of produced Results.
         """
         raise NotImplementedError("Worker.process_batch is not implemented")
+
+    async def perceive(self, tenant_id: TenantId) -> None:
+        """Augment worker state using MCP tools for external data.
+
+        Args:
+            tenant_id: Target tenant.
+
+        Raises:
+            NotImplementedError: Always, during TDD phase.
+        """
+        raise NotImplementedError("Worker.perceive is not implemented")
