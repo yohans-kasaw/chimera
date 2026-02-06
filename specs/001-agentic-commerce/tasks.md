@@ -15,8 +15,8 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create directory structure for commerce services and tests
-- [ ] T002 Organize commerce models and ports in `src/chimera/models/` and `src/chimera/ports/`
+- [x] T001 Create directory structure for commerce services and tests
+- [x] T002 Organize commerce models and ports in `src/chimera/models/` and `src/chimera/ports/`
 
 ---
 
@@ -24,9 +24,9 @@
 
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-- [ ] T003 [P] Create placeholder Pydantic models in `src/chimera/models/commerce.py` (Wallet, Budget, Transaction)
-- [ ] T004 [P] Create `CommerceService` protocol in `src/chimera/ports/commerce.py`
-- [ ] T005 [P] Setup placeholder for persistent spend tracking in Redis/Postgres (schema stubs)
+- [x] T003 [P] Create placeholder Pydantic models in `src/chimera/models/commerce.py` (Wallet, Budget, Transaction)
+- [x] T004 [P] Create `CommerceService` protocol in `src/chimera/ports/commerce.py`
+- [x] T005 [P] Setup placeholder for persistent spend tracking in Redis/Postgres (schema stubs)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -40,11 +40,11 @@
 
 ### Tests for User Story 2
 
-- [ ] T006 [P] [US2] Create failing unit tests for `CommerceManager` initialization in `tests/unit/test_commerce_manager.py`
+- [x] T006 [P] [US2] Create failing unit tests for `CommerceManager` initialization in `tests/unit/test_commerce_manager.py`
 
 ### Implementation for User Story 2 (Placeholders)
 
-- [ ] T007 [US2] Create `CommerceManager` class stub in `src/chimera/services/commerce.py` with `__init__` raising `NotImplementedError`
+- [x] T007 [US2] Create `CommerceManager` class stub in `src/chimera/services/commerce.py` with `__init__` raising `NotImplementedError`
 
 ---
 
@@ -56,14 +56,14 @@
 
 ### Tests for User Story 1
 
-- [ ] T008 [P] [US1] Create failing unit tests for `CFOJudge` logic in `tests/unit/test_cfo_judge.py`
-- [ ] T009 [P] [US1] Create failing unit tests for `transfer_asset` in `tests/unit/test_commerce_manager.py` (mocking blockchain)
-- [ ] T010 [US1] Create failing integration test for the full commerce workflow in `tests/integration/test_agentic_workflow.py`
+- [x] T008 [P] [US1] Create failing unit tests for `CFOJudge` logic in `tests/unit/test_cfo_judge.py`
+- [x] T009 [P] [US1] Create failing unit tests for `transfer_asset` in `tests/unit/test_commerce_manager.py` (mocking blockchain)
+- [x] T010 [US1] Create failing integration test for the full commerce workflow in `tests/integration/test_agentic_workflow.py`
 
 ### Implementation for User Story 1 (Placeholders)
 
-- [ ] T011 [US1] Create `CFOJudge` class stub in `src/chimera/services/judge_policy.py` (or extend existing)
-- [ ] T012 [US1] Implement `transfer_asset` and `get_balance` stubs in `src/chimera/services/commerce.py`
+- [x] T011 [US1] Create `CFOJudge` class stub in `src/chimera/services/judge_policy.py` (or extend existing)
+- [x] T012 [US1] Implement `transfer_asset` and `get_balance` stubs in `src/chimera/services/commerce.py`
 
 ---
 
@@ -75,18 +75,18 @@
 
 ### Tests for User Story 3
 
-- [ ] T013 [P] [US3] Create failing unit tests for `@budget_check` decorator in `tests/unit/test_budget_decorator.py`
+- [x] T013 [P] [US3] Create failing unit tests for `@budget_check` decorator in `tests/unit/test_budget_decorator.py`
 
 ### Implementation for User Story 3 (Placeholders)
 
-- [ ] T014 [US3] Create placeholder for `@budget_check` decorator in `src/chimera/lib/decorators.py`
+- [x] T014 [US3] Create placeholder for `@budget_check` decorator in `src/chimera/lib/decorators.py`
 
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T015 Verify all newly created tests fail as expected using `uv run pytest`
-- [ ] T016 Ensure `mypy --strict` passes for all placeholder files
+- [x] T015 Verify all newly created tests fail as expected using `uv run pytest`
+- [x] T016 Ensure `mypy --strict` passes for all placeholder files
 - [ ] T017 Document any mock requirements for the next implementation phase in `specs/001-agentic-commerce/research.md`
 
 ## Dependencies
