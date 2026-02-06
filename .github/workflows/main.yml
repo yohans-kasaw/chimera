@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   lint-type-test:
-    name: Lint, type, test
+    name: Lint, type, security, spec-check, pre-commit, test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +32,10 @@ jobs:
         run: make typecheck
       - name: Security checks
         run: make security
+      - name: Pre-commit checks
+        run: make pre-commit
+      - name: Spec alignment check
+        run: make spec-check
       - name: Tests
         run: make test
 
