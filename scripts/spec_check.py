@@ -75,6 +75,17 @@ def ensure_mcp_configuration() -> None:
     _fail_if_missing("MCP configuration", required)
 
 
+def ensure_skill_structure() -> None:
+    """Ensure skill contracts are formal and discoverable."""
+
+    required = [
+        REPO_ROOT / "skills.json",
+        REPO_ROOT / "skills.schema.json",
+        REPO_ROOT / "specs" / "skills_catalog.md",
+    ]
+    _fail_if_missing("Skills manifest", required)
+
+
 def ensure_specs_are_covered_by_tests() -> None:
     """Ensure each feature spec has at least one corresponding test module.
 
@@ -187,6 +198,7 @@ def main() -> None:
     ensure_required_files()
     ensure_contracts_are_tracked()
     ensure_mcp_configuration()
+    ensure_skill_structure()
     ensure_specs_are_covered_by_tests()
     ensure_security_specs()
     ensure_acceptance_criteria()

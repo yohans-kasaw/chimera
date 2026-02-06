@@ -8,6 +8,7 @@ Project Chimera needs a formal Skills framework that translates agent intent int
 - Provide a workflow runner that executes ordered skill steps.
 - Connect skills to MCP tools through the MCP client abstraction.
 - Ensure traceability with structured run records.
+- Provide a formal, machine-readable skills catalog with precise I/O schemas and error cases.
 
 ## Non-Goals
 - Implement production MCP servers (handled in Workstream C).
@@ -65,6 +66,9 @@ Agent Intent
 ## Implementation Mapping
 - Skills package: [src/chimera/skills](../../src/chimera/skills)
 - Workflow pipeline: [src/chimera/pipelines/skills_workflow.py](../../src/chimera/pipelines/skills_workflow.py)
+- Skills manifest (contracts): [skills.json](../../skills.json)
+- Skills manifest schema: [skills.schema.json](../../skills.schema.json)
+- Skills docs: [specs/skills_catalog.md](../skills_catalog.md)
 - MCP registry (committed): [mcp.json](../../mcp.json)
 - MCP schema (validation): [mcp.schema.json](../../mcp.schema.json)
 - MCP docs: [specs/mcp_configuration.md](../mcp_configuration.md)
@@ -110,6 +114,14 @@ Agent Intent
     *   **When** I run `python scripts/validate_mcp_config.py`
     *   **Then** configuration validation succeeds
     *   **And** each configured server defines at least one tool with `input_schema` and `output_schema`
+
+### AC-006: Skills Catalog Is Self-Documenting (Happy Path)
+*   **Trace**: [Skills Manifest]
+*   **Scenario**: Validate Skills Manifest
+    *   **Given** the repository contains `skills.json` and `skills.schema.json`
+    *   **When** I run `python scripts/validate_skills_manifest.py`
+    *   **Then** skills manifest validation succeeds
+    *   **And** the manifest defines at least 3 skills with `input_schema`, `output_schema`, `dependencies`, and `error_cases`
 
 ## Security & Compliance *(mandatory)*
 This feature adheres to the [Master Security Architecture](../technical.md#7-security-architecture--compliance-rubric-pro).

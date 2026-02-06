@@ -1,0 +1,171 @@
+{
+  "$schema": "./skills.schema.json",
+  "manifest_version": "1.0.0",
+  "project": "Chimera",
+  "description": "Runtime skill capability catalog for Chimera agents. This is the authoritative, machine-readable contract for skills an agent can invoke.",
+  "skills": [
+    {
+      "name": "echo",
+      "version": "1.0.0",
+      "purpose": "Return a message unchanged. Used as a deterministic checkpoint and as a smoke-test for the skill runtime.",
+      "dependencies": {
+        "mcp": {"required": false},
+        "context": {"tenant_id": true, "trace_id": true, "mcp_client": false}
+      },
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["message"],
+        "properties": {
+          "message": {"type": "string", "minLength": 1}
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["message"],
+        "properties": {
+          "message": {"type": "string"}
+        }
+      },
+      "error_cases": [
+        {
+          "code": "VALIDATION_ERROR",
+          "when": "Input does not conform to input_schema (e.g. missing message).",
+          "result": "Raise Pydantic ValidationError; no side effects."
+        }
+      ],
+      "examples": [
+        {"input": {"message": "hello"}, "output": {"message": "hello"}}
+      ],
+      "implementation": {
+        "python": {
+          "module": "chimera.skills.samples",
+          "class": "EchoSkill"
+        }
+      }
+    },
+    {
+      "name": "normalize_handle",
+      "version": "1.0.0",
+      "purpose": "Normalize a social handle into a canonical '@handle' form. Used to sanitize user input before social/MCP operations.",
+      "dependencies": {
+        "mcp": {"required": false},
+        "context": {"tenant_id": true, "trace_id": true, "mcp_client": false}
+      },
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["handle"],
+        "properties": {
+          "handle": {"type": "string", "minLength": 1}
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["handle"],
+        "properties": {
+          "handle": {
+            "type": "string",
+            "pattern": "^@.+$",
+            "description": "Always returns a string beginning with '@'."
+          }
+        }
+      },
+      "error_cases": [
+        {
+          "code": "VALIDATION_ERROR",
+          "when": "Input does not conform to input_schema (e.g. handle is empty).",
+          "result": "Raise Pydantic ValidationError; no side effects."
+        }
+      ],
+      "examples": [
+        {"input": {"handle": "chimera_ai"}, "output": {"handle": "@chimera_ai"}},
+        {"input": {"handle": " @chimera_ai  "}, "output": {"handle": "@chimera_ai"}}
+      ],
+      "implementation": {
+        "python": {
+          "module": "chimera.skills.samples",
+          "class": "NormalizeHandleSkill"
+        }
+      }
+    },
+    {
+      "name": "mcp_tool",
+      "version": "1.0.0",
+      "purpose": "Invoke an MCP tool through the configured MCP client. This is the standard bridge from Skills -> MCP tools.",
+      "dependencies": {
+        "mcp": {"required": true},
+        "context": {"tenant_id": true, "trace_id": true, "mcp_client": true}
+      },
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tool_name"],
+        "properties": {
+          "tool_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "MCP tool identifier. Must match a tool returned by MCP list_tools() and/or configured in mcp.json."
+          },
+          "arguments": {
+            "type": "object",
+            "default": {},
+            "description": "Tool arguments payload. Structure is tool-specific and MUST conform to the target tool's input schema."
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["response"],
+        "properties": {
+          "response": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["content", "is_error"],
+            "properties": {
+              "content": {"description": "Raw content returned by the MCP tool."},
+              "is_error": {"type": "boolean"}
+            }
+          }
+        }
+      },
+      "error_cases": [
+        {
+          "code": "MCP_CLIENT_MISSING",
+          "when": "SkillContext.mcp_client is null.",
+          "result": "Raise RuntimeError('MCP client is required for mcp_tool skill'); no side effects."
+        },
+        {
+          "code": "VALIDATION_ERROR",
+          "when": "Input does not conform to input_schema (e.g. missing tool_name).",
+          "result": "Raise Pydantic ValidationError; no side effects."
+        },
+        {
+          "code": "MCP_TOOL_ERROR",
+          "when": "The MCP server returns a tool-level error.",
+          "result": "Return response.is_error=true and propagate response.content for downstream handling (Judge/HITL)."
+        },
+        {
+          "code": "MCP_TRANSPORT_ERROR",
+          "when": "Transport fails (server crash, timeout, connection error).",
+          "result": "Raise RuntimeError/ConnectionError from MCP client; workflow runner captures as failed step."
+        }
+      ],
+      "examples": [
+        {
+          "input": {"tool_name": "fetch_feed", "arguments": {"platform": "twitter", "limit": 5}},
+          "output": {"response": {"content": {"posts": []}, "is_error": false}}
+        }
+      ],
+      "implementation": {
+        "python": {
+          "module": "chimera.skills.samples",
+          "class": "McpToolSkill"
+        }
+      }
+    }
+  ]
+}

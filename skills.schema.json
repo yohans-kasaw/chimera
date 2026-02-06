@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimera.local/schemas/skills.schema.json",
+  "title": "Chimera Skills Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "project", "skills"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "manifest_version": {"type": "string"},
+    "project": {"type": "string"},
+    "description": {"type": "string"},
+    "skills": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"$ref": "#/$defs/skill"}
+    }
+  },
+  "$defs": {
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "purpose",
+        "input_schema",
+        "output_schema",
+        "error_cases",
+        "dependencies"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_\\-]{0,63}$"
+        },
+        "version": {"type": "string"},
+        "purpose": {"type": "string", "minLength": 1},
+        "input_schema": {"type": "object"},
+        "output_schema": {"type": "object"},
+        "dependencies": {"$ref": "#/$defs/dependencies"},
+        "error_cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/error_case"}
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["input", "output"],
+            "properties": {
+              "input": {"type": "object"},
+              "output": {"type": "object"}
+            }
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["python"],
+          "properties": {
+            "python": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["module", "class"],
+              "properties": {
+                "module": {"type": "string"},
+                "class": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mcp", "context"],
+      "properties": {
+        "mcp": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required"],
+          "properties": {
+            "required": {"type": "boolean"},
+            "server": {"type": "string"},
+            "tool": {"type": "string"}
+          }
+        },
+        "context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tenant_id", "trace_id"],
+          "properties": {
+            "tenant_id": {"type": "boolean"},
+            "trace_id": {"type": "boolean"},
+            "mcp_client": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "error_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "when", "result"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "when": {"type": "string", "minLength": 1},
+        "result": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

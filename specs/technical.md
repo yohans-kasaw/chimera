@@ -40,6 +40,14 @@ Chimera's external tool/services layer is declared as a **versioned MCP server r
 ## Skills & Workflow Specifications
 *   **Skills + MCP Workflow Spec**: [002-skills-mcp-workflow/spec.md](./002-skills-mcp-workflow/spec.md)
 
+## Agent Skills Catalog (Runtime)
+
+Chimera defines a formal, discoverable skills structure:
+
+*   **Skills Catalog**: [skills_catalog.md](./skills_catalog.md)
+*   **Skills Manifest (JSON)**: [`skills.json`](../skills.json)
+*   **Skills Manifest Schema**: [`skills.schema.json`](../skills.schema.json)
+
 ## CI/CD & Governance
 The CI/CD pipeline enforces spec fidelity, code quality, and security checks.
 

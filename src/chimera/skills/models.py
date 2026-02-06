@@ -41,15 +41,6 @@ class SkillContext(BaseModel):
 class SkillRunStatus(StrEnum):
     """Status of a skill execution step."""
 
-    Args:
-        None.
-
-    Returns:
-        None.
-
-    Raises:
-        None.
-
     SUCCEEDED = "succeeded"
     FAILED = "failed"
 

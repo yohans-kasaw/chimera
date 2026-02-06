@@ -49,6 +49,9 @@ Project Chimera has transitioned from a concept to a robust "Factory" for autono
 Project Chimera uses a Skills framework to bridge agent intent to executable workflows.
 
 - Skills base + models: [src/chimera/skills](src/chimera/skills)
+- Skills catalog (contracts): [skills.json](skills.json)
+- Skills catalog schema: [skills.schema.json](skills.schema.json)
+- Skills documentation: [specs/skills_catalog.md](specs/skills_catalog.md)
 - Sample skills + workflow builder: [src/chimera/skills/samples.py](src/chimera/skills/samples.py)
 - Workflow runner: [src/chimera/skills/workflow.py](src/chimera/skills/workflow.py)
 - Pipeline wrapper: [src/chimera/pipelines/skills_workflow.py](src/chimera/pipelines/skills_workflow.py)
@@ -66,6 +69,10 @@ See the spec for the implementation contract and planned steps.
 To enable local MCP tooling, ensure required env vars are set (see `specs/mcp_configuration.md`) and validate the config:
 
 - `python scripts/validate_mcp_config.py`
+
+To validate the skills contracts:
+
+- `python scripts/validate_skills_manifest.py`
 
 ## Docker
 - `docker build -t chimera-ci .`
