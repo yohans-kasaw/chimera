@@ -1,104 +1,74 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: MCP Client Integration
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Branch**: `001-mcp-client` | **Date**: 2026-02-06 | **Spec**: [spec.md](spec.md)
+**Input**: Feature specification from `/specs/001-mcp-client/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+This feature implements a robust `MCPClient` based on the Model Context Protocol 1.0. It supports stdio transport, JSON-RPC 2.0 communication, tool discovery, and execution. The implementation follows a strict TDD approach, starting with failing tests and placeholder interfaces.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: Python 3.12+  
+**Primary Dependencies**: `mcp` (official SDK), `pydantic`, `anyio`  
+**Storage**: N/A (Stateless client)  
+**Testing**: `pytest`, `pytest-asyncio`, `fakeredis` (for worker integration)  
+**Target Platform**: Linux/MacOS (Stdio-compatible environments)
+**Project Type**: Python Library Integration  
+**Performance Goals**: Tool discovery < 100ms, 100% execution reliability.  
+**Constraints**: MCP 1.0 strictly, No direct API coupling per Constitution Principle I.  
+**Scale/Scope**: Support for multiple concurrent MCP server connections.
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-[Gates determined based on constitution file]
+- **I. MCP-First Integration**: PASSED. This feature is the foundation for following this principle.
+- **V. Python Quality**: PASSED. Using `uv`, `mypy --strict`, `ruff`, and `pytest` with 90%+ coverage goal.
 
 ## Project Structure
 
-### Documentation (this feature)
+### Documentation
 
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit.plan command output)
-├── research.md          # Phase 0 output (/speckit.plan command)
-├── data-model.md        # Phase 1 output (/speckit.plan command)
-├── quickstart.md        # Phase 1 output (/speckit.plan command)
-├── contracts/           # Phase 1 output (/speckit.plan command)
-└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+specs/001-mcp-client/
+├── plan.md              # This file
+├── checklists/
+│   └── requirements.md
+└── spec.md              # Feature specification
 ```
 
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
+### Source Code
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
+src/chimera/
 ├── models/
+│   └── mcp.py           # Pydantic models for ToolDefinition, ToolResult
+├── ports/
+│   └── mcp.py           # MCPClientPort interface
 ├── services/
-├── cli/
-└── lib/
+│   └── mcp_client.py    # MCPClient implementation (context manager)
+└── worker.py            # Updated to use MCPClient in perception loop
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+tests/chimera/
+├── unit/
+│   ├── test_mcp_models.py
+│   └── test_mcp_client.py
+└── integration/
+    └── test_worker_mcp_perception.py
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Integrated into existing Chimera service architecture. Adding `ports/mcp.py` to define the boundary and `models/mcp.py` for protocol-specific data structures.
 
-## Complexity Tracking
+## Implementation Strategy
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+### TDD Phase (Current)
+1. Define Pydantic models in `models/mcp.py` (placeholders).
+2. Define `MCPClientPort` interface in `ports/mcp.py`.
+3. Create `src/chimera/services/mcp_client.py` with empty class/methods.
+4. Write failing unit tests for model validation.
+5. Write failing unit tests for `MCPClient` handshake, discovery, and execution using a mock transport.
+6. Write failing integration test for `Worker` perception loop using a dummy tool.
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+### MVP Scope
+- Stdio transport only.
+- Basic tool discovery and execution.
+- Integration into `Worker.perceive()`.
